@@ -1,4 +1,4 @@
-# LegoFlask
+LegoFlask
 ===========
 
 A Flask server that can be run on the Raspberry Pi, to interface with Lego Mindstorms.

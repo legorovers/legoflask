@@ -1,6 +1,44 @@
-from flask import Flask
+from flask import Flask, render_template
+import sys
+import nxt.locator
+from nxt.motor import *
+from time import sleep
+from nxt.sensor import *
+
 
 app = Flask(__name__)
+
+
+@app.route('/')
+def index():
+    return render_template('index.html', title='LegoFlask')
+
+
+@app.route('/forward/')
+def forward():
+    '''
+    Move the robot forward
+    '''
+    b = nxt.locator.find_one_brick()
+    m_left = Motor(b, PORT_B)
+    m_right = Motor(b, PORT_C)
+    m_left.run(power=100)
+    m_right.run(power=100)
+    sleep(0.3)
+    return ('success')
+
+
+@app.route('/stop/')
+def stop():
+    '''
+    Stop the robot
+    '''
+    b = nxt.locator.find_one_brick()
+    m_left = Motor(b, PORT_B)
+    m_right = Motor(b, PORT_C)
+    m_left.idle()
+    m_right.idle()
+    return ('success')
 
 
 if __name__ == '__main__':
