@@ -1,10 +1,8 @@
 from flask import Flask, abort, render_template
 import sys
-import nxt.locator
-from nxt.motor import *
+import nxt2
+import ev
 from time import sleep
-from nxt.sensor import *
-
 
 app = Flask(__name__)
 
@@ -25,14 +23,7 @@ def forward():
     Move the robot forward
     '''
     try:
-        b = nxt.locator.find_one_brick()
-        m_left = Motor(b, PORT_B)
-        m_right = Motor(b, PORT_C)
-        m_left.run(power=100)
-        m_right.run(power=100)
-        sleep(0.3)
-        m_left.idle()
-        m_right.idle()
+        robot.forward()
         return 'success'
     except:
         abort(404)
@@ -44,11 +35,7 @@ def stop():
     Stop the robot
     '''
     try:
-        b = nxt.locator.find_one_brick()
-        m_left = Motor(b, PORT_B)
-        m_right = Motor(b, PORT_C)
-        m_left.idle()
-        m_right.idle()
+        robot.stop()
         return 'success'
     except:
         abort(404)
@@ -57,16 +44,7 @@ def stop():
 @app.route('/right/')
 def right():
     try:
-        b = nxt.locator.find_one_brick()
-        m_left = Motor(b, PORT_B)
-        m_right = Motor(b, PORT_C)
-        m_right.idle()
-        m_left.idle()
-        m_right.run(power=-100)
-        m_left.run(power=100)
-        sleep(0.3)
-        m_right.idle()
-        m_left.idle()
+        robot.right()
         return 'success'
     except:
         abort(404)
@@ -75,19 +53,7 @@ def right():
 @app.route('/left/')
 def left():
     try:
-        b = nxt.locator.find_one_brick()
-        m_left = Motor(b, PORT_B)
-        m_right = Motor(b, PORT_C)
-        m_left.run(power=-100)
-        m_right.run(power=-100)
-        sleep(0.5)
-        m_right.idle()
-        m_left.idle()
-        m_right.run(power=100)
-        m_left.run(power=-100)
-        sleep(0.7)
-        m_right.idle()
-        m_left.idle()
+        robot.left()
         return 'success'
     except:
         abort(404)
@@ -98,4 +64,8 @@ def spin():
     return 'success'
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    if sys.argv[1] == 'ev3':
+        robot = ev
+    else:
+        robot = nxt2
+    app.run(debug=True, host='0.0.0.0', port=80)
