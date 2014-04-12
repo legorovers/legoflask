@@ -1,6 +1,46 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="row">
-    This is the index page!
+<div class="row center">
+    <div class="col-md-3"></div>
+    <div class="col-md-6"><h1>PiStorms Mars Rover</h1></div>
 </div>
+<div class="row pad_bot">
+    <div class="col-md-5"></div>
+    <div class="col-md-2 center"><a class="btn button" onClick="move('forward');return false;">Forward</a></div>
+    <div class="col-md-5"></div>
+</div>
+<div class="row pad_bot">
+    <div class="col-md-2"></div>
+    <div class="col-md-2 center"><a class="btn button" onClick="move('left');return false;">Left</a></div>
+    <div class="col-md-4 center"><a class="btn button" onClick="move('spin');return false;">Spin</a></div>
+    <div class="col-md-2 center"><a class="btn button" onClick="move('right');return false;">Right</a></div>
+</div>
+<div class="row">
+    <div class="col-md-5"></div>
+    <div class="col-md-2 center"><a class="btn button" onClick="move('reverse');return false;">Reverse</a></div>
+    <div class="col-md-5"></div>
+</div>
+<div class="row">
+    <div class='log'></div>
+    </div>
+
+<script type="text/javascript">
+    var move = function move(direction){
+        var call_url = '/' + direction + '/';
+        jQuery.ajax({
+            dataType: 'json',
+            url: call_url,
+            context: document.body
+        }).complete(function(data) {
+            if(data['status'] == 200){
+            // Update command log
+            jQuery('.log').text('Move issued: ' + direction);
+        }
+        else if (data['status'] == 404) {
+            // Error
+            jQuery('.log').text('An error occured!');
+        }
+        });
+    }
+</script>
 {% endblock %}
