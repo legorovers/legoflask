@@ -14,10 +14,19 @@ make install
 
 To install the server and all dependencies.
 
-## Running
+## Run the server
 
 Run the command:
 
 ```
 make run
+```
+
+
+## Uninstall
+
+You can remove the installation using the command:
+
+```
+make clean
 ```
