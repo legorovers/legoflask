@@ -1,4 +1,4 @@
-from flask import Flask, abort, render_template, jsonify
+from flask import Flask, abort, render_template, jsonify, request
 import sys
 from time import sleep
 
@@ -77,6 +77,17 @@ def distance():
     except Exception as e:
         print e
         abort(404)
+
+@app.route('/api/rules/', methods=['GET', 'POST'])
+def rules():
+    if request.method == 'POST':
+        print request.json
+        for rule in request.json:
+            title = rule['title']
+            trigger = rule['trigger']
+            actions = rule['actions']
+            print "rule: %s" % title
+    return jsonify(result='ok')
 
 if __name__ == '__main__':
     if sys.argv[1] == 'ev3':

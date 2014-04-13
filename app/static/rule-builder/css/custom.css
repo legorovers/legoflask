@@ -1,0 +1,36 @@
+#main {
+    padding: 24px 0;
+}
+.inactive {
+    background-color: #f7f7f9;
+}
+.icon-left:before {
+    content: "\e091";
+}
+.icon-right:before {
+    content: "\e092";
+}
+.icon-forward:before {
+    content: "\e093";
+}
+.icon-back:before {
+    content: "\e094";
+}
+.icon-stop:before {
+    content: "\e074";
+}
+#actions .btn {
+    margin: 6px;
+}
+.action-placeholder {
+    border: 2px dotted #666;
+}
+.dropdown-menu .btn {
+    text-align: left;
+}
+.dropdown-menu li {
+    border-bottom: 1px solid #E5E5E5;
+}
+.dropdown-menu li:last-of-type {
+    border-width: 0;
+}

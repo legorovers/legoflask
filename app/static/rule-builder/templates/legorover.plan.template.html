@@ -1,0 +1,41 @@
+<div class="panel panel-default">
+    <div class="panel-heading" ng-init="titleEditable">
+        <h3 ng-show="!titleEditable" class="panel-title">{{ plan.title }} <a ng-click="titleEditable = true" class="glyphicon glyphicon-pencil"></a></h3>
+        <input ng-show="titleEditable" ng-model="plan.title" type="text" />
+    </div>
+    <div class="panel-body">
+        <p>Choose a trigger, then drag and drop one or more actions to create your plan.</p>
+        <p><b>If...</b> choose trigger</p>
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                {{ plan.trigger.title }} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="trigger in options.triggers" ng-click="selectTrigger(trigger)"><a>{{ trigger.title }}</a></li>
+            </ul>
+        </div>
+        <p>&nbsp;<br /></p>
+        <p><b>Then...</b> add one or more actions</p>
+        <div id="actions" >
+            <div>
+                <div>
+                    <div class="btn btn-info btn-draggable" ng-repeat="item in options.actions" ng-model="options.actions" ng-show="item.title" data-drag="true" data-jqyoui-options="{helper: 'clone'}" jqyoui-draggable="{index: {{$index}}, placeholder: 'keep'}"><span class="glyphicon icon-{{ className(item.title) }}"></span><span class="sr-only">{{item.title}}</span></div>
+                </div>
+                <div id="actions-selected" class="well" data-drop="true" ng-model="plan.actions" jqyoui-droppable="{multiple:true}">
+            <span ng-repeat="item in plan.actions track by $index">
+                <span class="btn btn-info action-selected" ng-show="item.title" ng-model="plan.actions"><span class="glyphicon icon-{{ className(item.title) }}"></span><span class="sr-only">{{item.title}}</span></span> then
+            </span>
+
+            <span ng-show="!plan.actions.length">
+                <span class="btn action-placeholder"><span class="glyphicon glyphicon-plus"></span><span class="sr-only">ACTION</span></span> then
+            </span>
+            <span>
+                <span class="btn action-placeholder"><span class="glyphicon glyphicon-plus"></span><span class="sr-only">ACTION</span></span> then
+            </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="btn btn-primary" ng-click="done()">Done</div>

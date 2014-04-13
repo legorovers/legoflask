@@ -1,0 +1,17 @@
+<h2>Plans</h2>
+<a class="lead" ng-href="#/plans/new"><span class="glyphicon glyphicon-plus-sign"></span> Add new plan</a>
+<ul class="list-group">
+    <li ng-class="{'list-group-item-success': plan.active, 'inactive': !plan.active}" class="list-group-item" ng-repeat="plan in plans.list">
+        {{ plan.title }}<div class="dropdown pull-right">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <span ng-show="!plan.active">Inactive</span><span ng-show="plan.active">Active</span> <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="btn btn-link" ng-click="plan.active = !plan.active"><span ng-show="!plan.active"><span class="glyphicon glyphicon-ok-circle"></span> Activate</span><span ng-show="plan.active"><span class="glyphicon glyphicon-remove-circle"></span> Deactivate</span></a></li>
+                <li><a class="btn btn-link" ng-href="#/plans/edit/{{ plan.id }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
+                <li><a class="btn btn-link" ng-click="deletePlan(plan.id)"><span class="glyphicon glyphicon-trash"></span> Delete</a></li>
+            </ul>
+        </div>
+    </li>
+</ul>
+<div class="btn btn-primary" ng-disabled="sendingPlans" ng-click="sendPlans()">Send</div> <span class="text-muted" ng-show="sendingPlans">Sending...</span>
