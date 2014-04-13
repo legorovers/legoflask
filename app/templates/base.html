@@ -12,7 +12,7 @@
                 max-width: 400px;
             }
              #dpad canvas {
-                background: white url(images/d-pad.gif) no-repeat center center;
+                background: white url(/static/images/d-pad.gif) no-repeat center center;
                 border-radius: 100%;
                 border: 1px dashed #333;
              }
@@ -88,7 +88,7 @@
                             commandSing:function(touch) {
                                 clearInterval(controlInterval);
                                 directionCont = getCommandForPoint(touch.pageX, touch.pageY, touch.force);
-                                document.getElementsByTagName('canvas')[0].style.backgroundImage = "url('images/d-pad.gif')";
+                                document.getElementsByTagName('canvas')[0].style.backgroundImage = "url('/static/images/d-pad.gif')";
                             }
         }
 
@@ -211,24 +211,24 @@ function getCommandForPoint(touchX, touchY, force)
         duration = directionX;
         move('left');
 
-    canvas.style.backgroundImage = "url('images/d-pad-left.gif')";
+    canvas.style.backgroundImage = "url('/static/images/d-pad-left.gif')";
     }
     if (direction == 'forward') {
         duration = directionY * 5;
         move('forward');
 
-    canvas.style.backgroundImage = "url('images/d-pad-fwd.gif')";
+    canvas.style.backgroundImage = "url('/static/images/d-pad-fwd.gif')";
     }
     if (direction =='right') {
         duration = -directionX;
         move('right');
 
-    canvas.style.backgroundImage = "url('images/d-pad-right.gif')";
+    canvas.style.backgroundImage = "url('/static/images/d-pad-right.gif')";
     }
     if (direction == 'reverse') {
         duration = -directionY * 3;
         move('reverse');
-    canvas.style.backgroundImage = "url('images/d-pad-back.gif')";
+    canvas.style.backgroundImage = "url('/static/images/d-pad-back.gif')";
     }
 
   // create JSON response
