@@ -27,7 +27,7 @@ def stop():
     m_right.idle()
 
 
-def right():
+def spin_right():
     b = nxt.locator.find_one_brick()
     m_left = Motor(b, PORT_B)
     m_right = Motor(b, PORT_C)
@@ -39,7 +39,7 @@ def right():
     m_right.idle()
     m_left.idle()
 
-def left():
+def spin_left():
     b = nxt.locator.find_one_brick()
     m_left = Motor(b, PORT_B)
     m_right = Motor(b, PORT_C)

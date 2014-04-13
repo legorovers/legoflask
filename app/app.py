@@ -1,7 +1,5 @@
 from flask import Flask, abort, render_template
 import sys
-import nxt2
-import ev
 from time import sleep
 
 app = Flask(__name__)
@@ -40,20 +38,29 @@ def stop():
     except:
         abort(404)
 
+@app.route('/reverse/')
+def backward():
+    try:
+        robot.backward()
+        return 'success'
+    except:
+        abort(404)
+
 
 @app.route('/right/')
 def right():
     try:
-        robot.right()
+        robot.spin_right()
         return 'success'
-    except:
+    except Exception as e:
+        print e
         abort(404)
 
 
 @app.route('/left/')
 def left():
     try:
-        robot.left()
+        robot.spin_left()
         return 'success'
     except:
         abort(404)
@@ -65,7 +72,9 @@ def spin():
 
 if __name__ == '__main__':
     if sys.argv[1] == 'ev3':
+        import ev
         robot = ev
     else:
+        import nxt2
         robot = nxt2
-    app.run(debug=True, host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=80) # debug=True

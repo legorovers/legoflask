@@ -2,6 +2,8 @@ from time import sleep
 import ev3
 from ev3.rawdevice import motordevice
 
+ev3.open_all_devices()
+
 A = 0x01
 B = 0x02
 C = 0x04
@@ -15,48 +17,36 @@ def forward():
     '''
     Move the robot forward
     '''
-    ev3.open_all_devices()
     motordevice.speed(both,20)
     sleep(0.3)
     motordevice.stop(both, brake=1)
+
+def backward():
+    '''
+    Reverse
+    '''
+    motordevice.polarity(both,0)
+    motordevice.speed(both,20)
+    sleep(0.3)
+    motordevice.stop(both, brake=1)
+    motordevice.polarity(both,0)
 
 def stop():
     '''
     Stop the robot
     '''
-    pass
-#    b = nxt.locator.find_one_brick()
-#    m_left = Motor(b, PORT_B)
-#    m_right = Motor(b, PORT_C)
-#    m_left.idle()
-#    m_right.idle()
+    motordevice.stop(both, brake=1)
 
+def spin_right():
+    motordevice.polarity(left,0)
+    motordevice.speed(both,20)
+    sleep(0.3)
+    motordevice.stop(both, brake=1)
+    motordevice.polarity(left,0)
 
-def right():
-    pass
-#    b = nxt.locator.find_one_brick()
-#    m_left = Motor(b, PORT_B)
-#    m_right = Motor(b, PORT_C)
-#    m_right.idle()
-#    m_left.idle()
-#    m_right.run(power=-100)
-#    m_left.run(power=100)
-#    sleep(0.3)
-#    m_right.idle()
-#    m_left.idle()
-
-def left():
-    pass
-#    b = nxt.locator.find_one_brick()
-#    m_left = Motor(b, PORT_B)
-#    m_right = Motor(b, PORT_C)
-#    m_left.run(power=-100)
-#    m_right.run(power=-100)
-#    sleep(0.5)
-#    m_right.idle()
-#    m_left.idle()
-#    m_right.run(power=100)
-#    m_left.run(power=-100)
-#    sleep(0.7)
-#    m_right.idle()
-#    m_left.idle()
+def spin_left():
+    motordevice.polarity(right,0)
+    motordevice.speed(both,20)
+    sleep(0.3)
+    motordevice.stop(both, brake=1)
+    motordevice.polarity(right,0)
