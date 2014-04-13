@@ -1,8 +1,12 @@
 from time import sleep
-import ev3
 from ev3.rawdevice import motordevice
+#from ev3.rawdevice import analogdevice
+from ev3.rawdevice import uartdevice
+from ev3.sensor import lego
 
-ev3.open_all_devices()
+motordevice.open_device()
+#analogdevice.open_device()
+uartdevice.open_device() 
 
 A = 0x01
 B = 0x02
@@ -12,6 +16,9 @@ D = 0x08
 right = B
 left = C
 both = B+C
+
+ir = lego.EV3IRSensor(2)  # looks like a 0-based count
+ir.set_proximity_mode()
 
 def forward():
     '''
@@ -50,3 +57,7 @@ def spin_left():
     sleep(0.3)
     motordevice.stop(both, brake=1)
     motordevice.polarity(right,0)
+
+def distance():
+    return ir.get_distance()
+

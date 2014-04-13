@@ -70,6 +70,14 @@ def left():
 def spin():
     return 'success'
 
+@app.route('/distance/')
+def distance():
+    try:
+        return "distance %s" % robot.distance()
+    except Exception as e:
+        print e
+        abort(404)
+
 if __name__ == '__main__':
     if sys.argv[1] == 'ev3':
         import ev
