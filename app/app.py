@@ -1,4 +1,4 @@
-from flask import Flask, abort, render_template
+from flask import Flask, abort, render_template, jsonify
 import sys
 from time import sleep
 
@@ -70,10 +70,10 @@ def left():
 def spin():
     return 'success'
 
-@app.route('/distance/')
+@app.route('/api/sense/')
 def distance():
     try:
-        return "distance %s" % robot.distance()
+        return jsonify(distance=robot.distance())
     except Exception as e:
         print e
         abort(404)
