@@ -93,7 +93,10 @@ if __name__ == '__main__':
     if sys.argv[1] == 'ev3':
         import ev
         robot = ev
-    else:
+    else if sys.argv[1] == 'nxt2':
         import nxt2
         robot = nxt2
+    else
+        import ev3linux
+        robot = ev3linux
     app.run(host='0.0.0.0', port=80) # debug=True
