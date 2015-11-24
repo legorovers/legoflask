@@ -96,7 +96,7 @@
 
 function handleClick(evt)
 {
-   e.preventDefault();
+   evt.preventDefault();
    
       // decorate the evt to look like a single touch event
    evt.changedTouches = [{pageX: evt.clientX, pageY: evt.clientY, force: 50}];
