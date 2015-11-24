@@ -4,16 +4,13 @@ from time import sleep
 
 app = Flask(__name__)
 
-
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('four_oh_four.html'), 404
 
-
 @app.route('/')
 def index():
     return render_template('index.html', title='PiStorms Mars Rover')
-
 
 @app.route('/forward/')
 def forward():
@@ -65,6 +62,13 @@ def left():
     except:
         abort(404)
 
+@app.route('/api/delay/<int:delay_in>')
+def set_delay(delay_in):
+    try:
+        robot.set_delay(delay_in/1000.0)
+        return 'success'
+    except:
+        abort(404)
 
 @app.route('/spin/')
 def spin():
@@ -93,10 +97,7 @@ if __name__ == '__main__':
     if sys.argv[1] == 'ev3':
         import ev
         robot = ev
-    else if sys.argv[1] == 'nxt2':
+    else:
         import nxt2
         robot = nxt2
-    else
-        import ev3linux
-        robot = ev3linux
     app.run(host='0.0.0.0', port=80) # debug=True
