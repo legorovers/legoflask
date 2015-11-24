@@ -24,6 +24,7 @@
       
             var el = document.getElementsByTagName("canvas")[0];
             el.addEventListener("touchstart", handleStart, false);
+            el.addEventListener("click", handleClick, false);
             el.addEventListener("touchend", handleEnd, false);
             //el.addEventListener("touchcancel", handleCancel, false);
             //el.addEventListener("touchleave", handleLeave, false);
@@ -91,6 +92,14 @@
                                 document.getElementsByTagName('canvas')[0].style.backgroundImage = "url('/static/images/d-pad.gif')";
                             }
         }
+
+function handleClick(evt)
+{
+   // decorate the evt to look like a single touch event
+   evt.changedTouches = [{pageX: evt.clientX, pageY: evt.clientY, force: 50}];
+   
+   handleStart(evt);
+}
 
 function handleStart(evt)
 {
