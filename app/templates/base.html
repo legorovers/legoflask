@@ -83,7 +83,8 @@
         var control = {
                             commandCont:function(touch) {
                                 clearInterval(controlInterval);
-                                controlInterval = setInterval(function(){getCommandForPoint(touch.pageX, touch.pageY, touch.force);}, 50);
+                                getCommandForPoint(touch.pageX, touch.pageY, touch.force);
+                                //controlInterval = setInterval(function(){getCommandForPoint(touch.pageX, touch.pageY, touch.force);}, 50);
                                 //document.getElementById('log').innerHTML = 'Cont';
                             },
                             commandSing:function(touch) {
