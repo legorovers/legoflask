@@ -1,13 +1,5 @@
 from time import sleep
-#from ev3.rawdevice import motordevice
-#from ev3.rawdevice import analogdevice
-#from ev3.rawdevice import uartdevice
-#from ev3.sensor import lego
-from ev3.ev3dev import Motor
-
-#motordevice.open_device()
-#analogdevice.open_device()
-#uartdevice.open_device() 
+from ev3.ev3dev import *
 
 A = 0x01
 B = 0x02
@@ -19,9 +11,6 @@ left = C
 both = B+C
 
 delay=0
-
-#ir = lego.EV3IRSensor(2)  # looks like a 0-based count
-#ir.set_proximity_mode()
 
 def set_delay(delay_in):
     global delay
@@ -78,5 +67,7 @@ def spin_left():
     b.run_position_limited(60, 255, stop_mode=Motor.STOP_MODE.HOLD)
 
 def distance():
-    return 1
+    distance =  irsens.value()
+    print "distance %s" % distance
+    return distance
 
