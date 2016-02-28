@@ -104,6 +104,11 @@ def rules():
             print "rule: %s" % title
     return jsonify(result='ok')
 
+@app.after_request
+def add_header(response):
+    response.cache_control.max_age = 60
+    return response
+
 if __name__ == '__main__':
     if sys.argv[1] == 'ev3':
         import ev
