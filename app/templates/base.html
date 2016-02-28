@@ -30,7 +30,7 @@
             //el.addEventListener("touchleave", handleLeave, false);
             el.addEventListener("touchmove", handleMove, false);
 
-            setInterval(function(){refreshImg()}, 500);
+            setInterval(function(){refreshImg()}, 1000);
             setInterval(function(){checkSensor()}, 1000);
             $('#delay').change(function() {
                 // post JSON to WebRover API
@@ -261,7 +261,8 @@ function getCommandForPoint(touchX, touchY, force)
 
 function refreshImg()
 {
-  $('#video').attr('src', $('#video').attr('src')+'?'+Math.random())
+  var src = $('#video').attr('src').split('?')[0]
+  $('#video').attr('src', src+'?'+Math.random())
 }
 function checkSensor() {
 $.getJSON('api/sense/', function(data) {

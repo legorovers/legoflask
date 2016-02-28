@@ -17,7 +17,7 @@
 
       camera.ready(function() {
         setInterval(function() {
-          var snapshot = camera.capture();
+          var snapshot = camera.capture({scale: 0.5});
           snapshot.show(); // Display the snapshot
           snapshot.upload({api_url: "/upload/"}).done(function(response) {
             response_container.innerHTML = response;
@@ -26,7 +26,7 @@
             //alert("Upload failed with status " + status_code);
             // ignore failures
           });
-        }, 500);
+        }, 1000);
       });
     </script>
   </body>
