@@ -13,19 +13,33 @@
     <script type="text/javascript" src="/static/canvas-to-blob.min.js"></script>
     <script type="text/javascript" src="/static/jpeg_camera_no_flash.min.js"></script>
     <script>
-      var camera = new JpegCamera("#camera", { shutter: false });
+      var camera = new JpegCamera("#camera", {shutter: false, scale: 0.5});
+      var snapshots = [];
+      var delay = 1300;
 
       camera.ready(function() {
         setInterval(function() {
-          var snapshot = camera.capture({scale: 0.5});
-          snapshot.show(); // Display the snapshot
-          snapshot.upload({api_url: "/upload/"}).done(function(response) {
-            response_container.innerHTML = response;
-            //this.discard(); // discard snapshot and show video stream again
-          }).fail(function(status_code, error_message, response) {
-            //alert("Upload failed with status " + status_code);
-            // ignore failures
-          });
+          var timestamp = Date.now();
+          var snapshot = camera.capture();
+          var length = snapshots.push({ts: timestamp, img: snapshot});
+
+          var index = -1;
+          for (var i = 0; i < length; i++) {
+            if (snapshots[i].ts > timestamp - delay) {
+              break;
+            }
+            index = i;
+          }
+          if (index >= 0)
+          {
+            snapshots[index].img.show(); // Display the snapshot
+            snapshots[index].img.upload({api_url: "/upload/"}).done(function(response) {
+              response_container.innerHTML = response;
+            }).fail(function(status_code, error_message, response) {
+              // ignore failures
+            });
+            snapshots.splice(0, index + 1);
+          }
         }, 1000);
       });
     </script>
