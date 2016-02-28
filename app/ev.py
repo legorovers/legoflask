@@ -8,6 +8,8 @@ lmotor, rmotor = [LargeMotor(address) for address in (OUTPUT_A, OUTPUT_B)]
 assert lmotor.connected
 assert rmotor.connected
 
+ussensor = UltrasonicSensor()
+
 delay=0
 
 def set_delay(delay_in):
@@ -50,8 +52,7 @@ def spin_left():
     rmotor.run_timed(duty_cycle_sp=60, time_sp=500)
 
 def distance():
-    return 100
-#    distance =  irsens.value()
-#    print "distance %s" % distance
-#    return distance
+    distance = ussensor.value() / 10.0
+    print "distance %scm" % distance
+    return distance
 
