@@ -100,4 +100,4 @@ if __name__ == '__main__':
     else:
         import nxt2
         robot = nxt2
-    app.run(host='0.0.0.0', port=80) # debug=True
+    app.run(host='0.0.0.0', port=5443, ssl_context='adhoc') # debug=True
