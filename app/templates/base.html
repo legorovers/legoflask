@@ -262,7 +262,7 @@ function getCommandForPoint(touchX, touchY, force)
 function refreshImg()
 {
   var src = $('#video').attr('src').split('?')[0]
-  $('#video').attr('src', src) //+'?'+Math.random())
+  $('#video').attr('src', src+'?'+Math.random())
 }
 function checkSensor() {
 $.getJSON('api/sense/', function(data) {
