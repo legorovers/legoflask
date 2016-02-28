@@ -36,3 +36,8 @@ make clean
 ## Developing via the USB Cable
 
 rsync -avz -e ssh legoflask/ robot@ev3dev.local:/home/robot/webrover1/
+
+
+## Creating the Self-signed Certificate
+
+openssl req  -nodes -new -x509 -subj "/C=UK/ST=Devon/L=Exeter/O=WebRover1/CN=10.0.0.1" -keyout server.key -out server.cert
