@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WebRover1 Camera</title>
+  </head>
+  <body>
+    <div id="camera" style="width: 400px; height: 300px">
+      <div class="placeholder">
+        Your browser does not support camera access.
+      </div>
+    </div><br>
+
+    <script type="text/javascript" src="/static/canvas-to-blob.min.js"></script>
+    <script type="text/javascript" src="/static/jpeg_camera_no_flash.min.js"></script>
+    <script>
+      var camera = new JpegCamera("#camera", { shutter: false });
+
+      camera.ready(function() {
+        setInterval(function() {
+          var snapshot = camera.capture();
+          snapshot.show(); // Display the snapshot
+          snapshot.upload({api_url: "/upload/"}).done(function(response) {
+            response_container.innerHTML = response;
+            //this.discard(); // discard snapshot and show video stream again
+          }).fail(function(status_code, error_message, response) {
+            //alert("Upload failed with status " + status_code);
+            // ignore failures
+          });
+        }, 500);
+      });
+    </script>
+  </body>
+</html>

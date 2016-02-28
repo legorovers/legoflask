@@ -12,6 +12,17 @@ def page_not_found(error):
 def index():
     return render_template('index.html', title='PiStorms Mars Rover')
 
+@app.route('/camera/')
+def camera():
+    return render_template('camera.html')
+
+@app.route('/upload/', methods=['POST'])
+def upload():
+    file = open('/home/robot/webrover1/app/static/images/camera.jpg', 'wb')
+    file.write(request.get_data())
+    file.close()
+    return 'success'
+
 @app.route('/forward/')
 def forward():
     '''
