@@ -16,6 +16,7 @@
       var camera = new JpegCamera("#camera", {shutter: false, scale: 0.5});
       var snapshots = [];
       var delay = 1300;
+      var uploaded = 0;
 
       camera.ready(function() {
         setInterval(function() {
@@ -32,15 +33,19 @@
           }
           if (index >= 0)
           {
-            snapshots[index].img.show(); // Display the snapshot
-            snapshots[index].img.upload({api_url: "/upload/"}).done(function(response) {
-              response_container.innerHTML = response;
-            }).fail(function(status_code, error_message, response) {
-              // ignore failures
-            });
+            // avoid flooding the server
+            if (Date.now() > uploaded + 1000) {
+              snapshots[index].img.show(); // Display the snapshot
+              snapshots[index].img.upload({api_url: "/upload/"}).done(function(response) {
+                response_container.innerHTML = response;
+              }).fail(function(status_code, error_message, response) {
+                // ignore failures
+              });
+              uploaded = Date.now();
+            }
             snapshots.splice(0, index + 1);
           }
-        }, 1000);
+        }, 200);
       });
     </script>
   </body>
