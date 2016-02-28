@@ -1,14 +1,12 @@
 from time import sleep
-from ev3.ev3dev import *
+from ev3dev.auto import *
 
-A = 0x01
-B = 0x02
-C = 0x04
-D = 0x08
+# Connect two large motors on output ports B and C
+lmotor, rmotor = [LargeMotor(address) for address in (OUTPUT_A, OUTPUT_B)]
 
-right = B
-left = C
-both = B+C
+# Check that the motors are actually connected
+assert lmotor.connected
+assert rmotor.connected
 
 delay=0
 
@@ -22,52 +20,38 @@ def forward():
     Move the robot forward
     '''
     sleep(delay)
-    a=Motor(port=Motor.PORT.A)
-    a.reset()
-    a.run_position_limited(700, 255, stop_mode=Motor.STOP_MODE.HOLD)
-    b=Motor(port=Motor.PORT.B)
-    b.reset()
-    b.run_position_limited(700, 255, stop_mode=Motor.STOP_MODE.HOLD)
+    for motor in (lmotor, rmotor):
+        motor.run_timed(duty_cycle_sp=60, time_sp=500)
 
 def backward():
     '''
     Reverse
     '''
     sleep(delay)
-    a=Motor(port=Motor.PORT.A)
-    a.reset()
-    a.run_position_limited(-360, 255, stop_mode=Motor.STOP_MODE.HOLD)
-    b=Motor(port=Motor.PORT.B)
-    b.reset()
-    b.run_position_limited(-360, 255, stop_mode=Motor.STOP_MODE.HOLD)
+    for motor in (lmotor, rmotor):
+        motor.run_timed(duty_cycle_sp=-60, time_sp=500)
 
 def stop():
     '''
     Stop the robot
     '''
     sleep(delay)
-    motordevice.stop(both, brake=1)
+    for motor in (lmotor, rmotor):
+        motor.stop(stop_command='brake')
 
 def spin_right():
     sleep(delay)
-    a=Motor(port=Motor.PORT.A)
-    a.reset()
-    a.run_position_limited(60, 255, stop_mode=Motor.STOP_MODE.HOLD)
-    b=Motor(port=Motor.PORT.B)
-    b.reset()
-    b.run_position_limited(-60, 255, stop_mode=Motor.STOP_MODE.HOLD)
+    lmotor.run_timed(duty_cycle_sp=60, time_sp=500)
+    rmotor.run_timed(duty_cycle_sp=-60, time_sp=500)
 
 def spin_left():
     sleep(delay)
-    a=Motor(port=Motor.PORT.A)
-    a.reset()
-    a.run_position_limited(-60, 255, stop_mode=Motor.STOP_MODE.HOLD)
-    b=Motor(port=Motor.PORT.B)
-    b.reset()
-    b.run_position_limited(60, 255, stop_mode=Motor.STOP_MODE.HOLD)
+    lmotor.run_timed(duty_cycle_sp=-60, time_sp=500)
+    rmotor.run_timed(duty_cycle_sp=60, time_sp=500)
 
 def distance():
-    distance =  irsens.value()
-    print "distance %s" % distance
-    return distance
+    return 100
+#    distance =  irsens.value()
+#    print "distance %s" % distance
+#    return distance
 
