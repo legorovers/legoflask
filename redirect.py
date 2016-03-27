@@ -7,7 +7,7 @@ import BaseHTTPServer
 class RedirectHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_HEAD(s):
         s.send_response(301)
-        s.send_header("Location", 'https://10.0.0.1:5443/')
+        s.send_header("Location", 'https://legorover.space:5443/')
         s.end_headers()
     def do_GET(s):
         s.do_HEAD()

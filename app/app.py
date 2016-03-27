@@ -111,5 +111,5 @@ if __name__ == '__main__':
     else:
         import nxt2
         robot = nxt2
-    context = ('server.cert', 'server.key')
+    context = ('legorover.crt', 'legorover.key')
     app.run(host='0.0.0.0', port=5443, ssl_context=context) # debug=True
