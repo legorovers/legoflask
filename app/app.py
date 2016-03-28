@@ -1,8 +1,13 @@
 from flask import Flask, abort, render_template, jsonify, request
+from flask_socketio import SocketIO
 import sys
 from time import sleep
 
+from robot import RobotThread
+
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'webrover1'
+socketio = SocketIO(app)
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -21,6 +26,7 @@ def upload():
     file = open('/home/robot/webrover1/app/static/images/camera.jpg', 'wb')
     file.write(request.get_data())
     file.close()
+    socketio.emit('refresh')
     return 'success'
 
 @app.route('/forward/')
@@ -93,6 +99,10 @@ def distance():
         print e
         abort(404)
 
+@socketio.on('delay')
+def handle_delay(delay):
+    print('new delay: ' + delay)
+
 @app.route('/api/rules/', methods=['GET', 'POST'])
 def rules():
     if request.method == 'POST':
@@ -111,5 +121,5 @@ if __name__ == '__main__':
     else:
         import nxt2
         robot = nxt2
-    context = ('legorover.crt', 'legorover.key')
-    app.run(host='0.0.0.0', port=5443, ssl_context=context) # debug=True
+    #thread = RobotThread()
+    socketio.run(app, host='0.0.0.0', port=5443, keyfile='legorover.key', certfile='legorover.crt', debug=True)

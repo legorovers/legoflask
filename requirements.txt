@@ -3,3 +3,5 @@ Requests
 pyOpenSSL
 nxt-python
 simplejson
+flask-socketio
+eventlet

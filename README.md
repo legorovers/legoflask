@@ -35,7 +35,7 @@ make clean
 
 ## Developing via the USB Cable
 
-rsync -avz -e ssh legoflask/ robot@ev3dev.local:/home/robot/webrover1/
+sshpass -pmaker rsync -avz -e ssh legoflask/ robot@ev3dev.local:/home/robot/webrover1/
 
 
 ## Running
@@ -59,7 +59,7 @@ Connect tablet to:
 
     https://10.0.0.1:5443/
 
-Or local PC:
+Or local PC (you'll need to ignore the certificate errors or add an /etc/hosts entry):
 
     https://ev3dev.local:5443/
 
