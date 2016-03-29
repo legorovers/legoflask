@@ -3,7 +3,7 @@ from flask_socketio import SocketIO
 import sys
 from time import sleep
 
-from robot import RobotThread
+from sense import SensorThread
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'webrover1'
@@ -115,11 +115,11 @@ def rules():
     return jsonify(result='ok')
 
 if __name__ == '__main__':
-    if sys.argv[1] == 'ev3':
-        import ev
-        robot = ev
-    else:
+    if len(sys.argv) > 1 and sys.argv[1] == 'nxt2':
         import nxt2
         robot = nxt2
-    #thread = RobotThread()
+    else:
+        import ev3
+        robot = ev3
+    thread = SensorThread(robot, socketio)
     socketio.run(app, host='0.0.0.0', port=5443, keyfile='legorover.key', certfile='legorover.crt', debug=True)

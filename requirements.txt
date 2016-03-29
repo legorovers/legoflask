@@ -1,7 +1,13 @@
+# Note that some dependencies may need to be installed using:
+# sudo apt-get install python-greenlet python-smbus python-pil python-ev3dev
 Flask
 Requests
 pyOpenSSL
-nxt-python
 simplejson
 flask-socketio
 eventlet
+watchdog
+# used for NXT robot
+nxt-python
+# used for EV3 robot
+python-ev3dev

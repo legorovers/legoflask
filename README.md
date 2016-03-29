@@ -43,7 +43,7 @@ sshpass -pmaker rsync -avz -e ssh legoflask/ robot@ev3dev.local:/home/robot/webr
     ssh robot@ev3dev.local
     workon webrover1
     cd webrover1
-    python app/app.py ev3
+    python app/app.py
 
 The port 80 redirect script:
 
@@ -77,3 +77,8 @@ Email Address []:4ba21db849491781b943df4d1cd45ada-4639958@contact.gandi.net
 ## Bundle Certificate with the Intermediates
 
 cat GandiStandardSSLCA2.pem >> legorover.crt
+
+
+# TODO
+
+Make the jpeg snapshots the same size as the display (400x300)
