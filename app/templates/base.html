@@ -11,11 +11,28 @@
             .main {
                 max-width: 400px;
             }
+            #dpad {
+                position: relative;
+            }
              #dpad canvas {
                 background: white url(/static/images/d-pad.gif) no-repeat center center;
                 border-radius: 100%;
                 border: 1px dashed #333;
+                filter: invert(100%);
+                -webkit-filter: invert(100%);
              }
+             #dpad .wash {
+                position: absolute;
+                top: 0;
+                width: 302px;
+                height: 302px;
+                background-color: cyan;
+                mix-blend-mode: multiply;
+                left: 0;
+                right: 0;
+                margin-left: auto;
+                margin-right: auto;
+            }
         </style>
         <script src="/static/jquery.min.js"></script>
         <script type="text/javascript" src="/static/socket.io-1.4.5.js"></script>
@@ -75,7 +92,7 @@
         }
 
         function start() {
-            var socket = io.connect('https://' + document.domain + ':' + location.port);
+            var socket = io.connect('http://' + document.domain, {transports: ['websocket']});
             var $dpad = $('canvas');
 
             handleKeys();
