@@ -4,66 +4,46 @@
         <title>{{ title }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link type="text/css" href="/static/style.css" rel="Stylesheet"/>
-        <style type="text/css">
-            body {
-                text-align: center;
-            }
-            .main {
-                max-width: 400px;
-            }
-            #dpad {
-                position: relative;
-            }
-             #dpad canvas {
-                background: white url(/static/images/d-pad.gif) no-repeat center center;
-                border-radius: 100%;
-                border: 1px dashed #333;
-                filter: invert(100%);
-                -webkit-filter: invert(100%);
-             }
-             #dpad .wash {
-                position: absolute;
-                top: 0;
-                width: 302px;
-                height: 302px;
-                background-color: cyan;
-                mix-blend-mode: multiply;
-                left: 0;
-                right: 0;
-                margin-left: auto;
-                margin-right: auto;
-            }
-        </style>
         <script src="/static/jquery.min.js"></script>
         <script type="text/javascript" src="/static/socket.io-1.4.5.js"></script>
         <script type="text/javascript">
+        var socket;
         var action = {
             direction: null,
             speed: 0
         };
 
+        function setAction(direction, speed)
+        {
+            if (direction != action.direction || speed != newAction.speed)
+            {
+                action.direction = direction;
+                action.speed = speed;
+                socket.emit('action', action);
+            }
+        }
+
         function handleKeys() {
             $(document).keydown(function(e) {
-                action.speed = 100;
                 switch (e.which) {
                     case 37: // left
                     case 65: // a
-                        action.direction = 'left';
+                        setAction('left', 100);
                         break;
 
                     case 38: // up
                     case 87: // w
-                        action.direction = 'forward';
+                        setAction('forward', 100);
                         break;
 
                     case 39: // right
                     case 68: // d
-                        action.direction = 'right';
+                        setAction('right', 100);
                         break;
 
                     case 40: // down
                     case 83: // s
-                        action.direction = 'reverse';
+                        setAction('reverse', 100);
                         break;
 
                     default:
@@ -74,8 +54,7 @@
 
             $(document).keyup(function(e) {
                 if ([37, 65, 38, 87,39, 68, 40, 83].indexOf(e.which) != -1) {
-                    action.speed = 0;
-                    action.direction = null;
+                    setAction(null, 0);
                     return false;
                 }
             });
@@ -92,7 +71,7 @@
         }
 
         function start() {
-            var socket = io.connect('http://' + document.domain, {transports: ['websocket']});
+            socket = io.connect('http://' + document.domain, {transports: ['websocket']});
             var $dpad = $('canvas');
 
             handleKeys();

@@ -1,17 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div id="heading">
+    <img src="/static/images/webrover1.png">
+</div>
+<div id="content">
 
-<div class="content"  style="position: relative">
-        <h1>WebRover1</h1>
-    <div class="main">
-        <h3><small>Drive me</small></h3>
+  <div id="cam">
+    <h2>cam</h2>
+    <div id="camera">
+        <img id="video" src="/static/images/camera.jpg">
+        <div class="wash"></div>
+    </div>
+    <div id="sensor"></div>
+  </div>
+
+  <div id="nav">
+    <h2>nav</h2>
      <div id="dpad">
         <canvas height="300px" style='height:300px;'>
         </canvas>
         <div class="wash"></div>
     </div>
-    <div id="settings">
         <form>
             <p>
                 <label>Time delay</label>
@@ -23,7 +33,6 @@
                 </select>
             </p>
         </form>
-        
         <form>
             <p>
                 <label>Obstacle Rule</label>
@@ -31,16 +40,17 @@
                     <option value="0">Off</option>
                     <option value="1">On</option>
                 </select>
-            <a href="../../rulebuilder/" class="btn btn-primary">Change Rule</a>
         </p>
         </form>
-    </div>
-    <p></p>
-    <h3><small>What I can see</small></h3>
-    <div id="sensor"></div>
+        <a href="/static/rule-builder/index.html">Rule Builder</a>
+  </div>
 
-    <a href="/static/rule-builder/index.html">Rule Builder</a>
-    <img id="video" src="/static/images/camera.jpg" style="width: 400px; height: 300px; max-width: 100%">
-    <div id="log"></div></div>
+  <div id="credits">
+    <img src="/static/images/liverpool.png">
+    <img src="/static/images/legoroversdevon.png">
+    <img src="/static/images/stfc.png">
+  </div>
+
+</div>
 
 {% endblock %}

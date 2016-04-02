@@ -1,0 +1,88 @@
+@font-face {
+  font-family: 'Exo';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Exo Light'), local('Exo-Light'), url(/static/exo-light.woff) format('woff');
+}
+body {
+    font-family: 'Exo';
+    font-weight: 300;
+    color: #17fdfb;
+    text-align: center;
+    background-color: #262626;
+    margin: 0;
+}
+#heading {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 64px;
+    padding-top: 15px;
+    border-right: 1px solid #6f6f6f;
+}
+#content {
+    margin-left: 64px;
+}
+#cam, #nav {
+    border-bottom: 1px solid #6f6f6f;
+}
+h2 {
+    font-size: 3em;
+    font-weight: 300;
+    text-align: left;
+    margin-top: -6px;
+    margin-bottom: 0;
+    padding-left: 15px;
+}
+#camera {
+    position: relative;
+}
+#video {
+    width: 400px;
+    height: 300px;
+    max-width: 100%;
+    border: 1px solid #17fdfb;
+    padding: 2px;
+    filter: grayscale(50%);
+    -webkit-filter: grayscale(50%);
+}
+#camera .wash {
+    position: absolute;
+    width: 400px;
+    height: 300px;
+    max-width: 100%;
+    top: 3px;
+    background-color: #d67559;
+    mix-blend-mode: multiply;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+#dpad {
+    position: relative;
+}
+ #dpad canvas {
+    background: white url(/static/images/d-pad.gif) no-repeat center center;
+    border-radius: 100%;
+    border: 1px dashed #333;
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
+ }
+ #dpad .wash {
+    position: absolute;
+    top: 0;
+    width: 302px;
+    height: 302px;
+    background-color: #17fdfb;
+    mix-blend-mode: multiply;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+#credits {
+    text-align: right;
+    padding: 15px;
+}

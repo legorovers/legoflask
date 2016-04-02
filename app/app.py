@@ -16,7 +16,7 @@ def page_not_found(error):
 
 @app.route('/')
 def index():
-    return render_template('index.html', title='PiStorms Mars Rover')
+    return render_template('index.html', title='WebRover1')
 
 @app.route('/forward/')
 def forward():
