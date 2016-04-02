@@ -52,7 +52,5 @@ def spin_left():
     rmotor.run_timed(duty_cycle_sp=60, time_sp=500)
 
 def distance():
-    distance = ussensor.value() / 10.0
-    print "distance %scm" % distance
-    return distance
+    return ussensor.value() / 10.0
 

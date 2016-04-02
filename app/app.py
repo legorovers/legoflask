@@ -2,10 +2,6 @@ import sys
 from time import sleep
 from flask import Flask, abort, render_template, jsonify, request
 from flask_socketio import SocketIO
-import gevent.monkey
-gevent.monkey.patch_all()
-from gevent.pywsgi import WSGIServer
-from ssl import SSLContext
 
 from sense import SensorThread
 
@@ -107,12 +103,11 @@ def rules():
     return jsonify(result='ok')
 
 
-cam_app = Flask(__name__)
-@cam_app.route('/camera/')
+@app.route('/camera/')
 def camera():
     return render_template('camera.html')
 
-@cam_app.route('/upload/', methods=['POST'])
+@app.route('/upload/', methods=['POST'])
 def upload():
     file = open('/home/robot/webrover1/app/static/images/camera.jpg', 'wb')
     file.write(request.get_data())
@@ -128,7 +123,6 @@ if __name__ == '__main__':
     else:
         import ev3
         robot = ev3
-    #thread = SensorThread(robot, socketio)
-    WSGIServer(('', 5443), cam_app, keyfile='legorover.key', certfile='legorover.crt').start()
+    thread = SensorThread(robot, socketio)
     print 'running socketio'
-    socketio.run(app, host='0.0.0.0', port=5080) #443, keyfile='legorover.key', certfile='legorover.crt', debug=True)
+    socketio.run(app, host='0.0.0.0', port=5000) #, debug=True)

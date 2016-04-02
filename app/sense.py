@@ -8,6 +8,7 @@ class SensorThread(object):
         self.notify = notify
         self.delay = delay
         self.interval = 1
+        self.distance = -1
 
         thread = threading.Thread(target=self.run, args=())
         thread.daemon = True                            # Daemonize thread
@@ -16,5 +17,8 @@ class SensorThread(object):
     def run(self):
         while True:
             distance = self.robot.distance()
-            self.notify.emit('sense', distance)
+            if not self.distance == distance:
+                self.notify.emit('sense', distance)
+                self.distance = distance
+                print "distance %scm" % distance
             time.sleep(self.interval)

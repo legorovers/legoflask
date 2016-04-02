@@ -45,23 +45,17 @@ sshpass -pmaker rsync -avz -e ssh legoflask/ robot@ev3dev.local:/home/robot/webr
     cd webrover1
     python app/app.py
 
-The port 80 redirect script:
-
-    sudo python redirect.py
-    <CTRL-Z>
-    bg
-
 Setup a mobile phone to connect to:
 
-    https://legorover.space:5443/camera/
+    https://legorover.space/camera/
 
 Connect tablet to:
 
-    https://10.0.0.1:5443/
+    http://legorover.space/
 
 Or local PC (you'll need to ignore the certificate errors or add an /etc/hosts entry):
 
-    https://ev3dev.local:5443/
+    http://ev3dev.local/
 
 
 ## Creating the Certificate Signing Request

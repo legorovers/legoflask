@@ -2,9 +2,9 @@
 # sudo apt-get install python-greenlet python-smbus python-pil python-ev3dev
 Flask
 Requests
-pyOpenSSL
 simplejson
 gevent
+gevent-websocket
 flask-socketio
 watchdog
 # used for NXT robot
