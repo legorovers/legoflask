@@ -4,8 +4,8 @@ Flask
 Requests
 pyOpenSSL
 simplejson
+gevent
 flask-socketio
-eventlet
 watchdog
 # used for NXT robot
 nxt-python
