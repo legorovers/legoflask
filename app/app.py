@@ -20,6 +20,7 @@ def index():
 
 @socketio.on('action')
 def action(direction, speed):
+    print speed
     if direction == 'forward':
         robot.forward()
     elif direction == 'left':

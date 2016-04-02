@@ -60,13 +60,53 @@
             });
         }
 
+        function setLoc(loc) {
+            var left = loc.x < 0;
+            var forward = loc.y < 0;
+            loc.x = Math.abs(loc.x);
+            loc.y = Math.abs(loc.y);
+            var rotate = loc.x > loc.y;
+            setAction(rotate ? (left ? 'left' : 'right') : (forward ? 'forward' : 'reverse'), rotate ? loc.x : loc.y);
+        }
+
         function handleMouse($dpad) {
             $dpad.mousedown(function(e) {
                 var loc = {
-                    x: e.pageX - $dpad.offset().left,
-                    y: e.pageY - $dpad.offset().top
+                    x: e.pageX - $dpad.offset().left - $dpad.width()/2,
+                    y: e.pageY - $dpad.offset().top - $dpad.height()/2
                 }
                 console.log(loc);
+                setLoc(loc);
+            });
+            // mousemove
+            $dpad.mouseup(function(e) {
+                setAction(null, 0);
+            });
+        }
+
+        function handleTouch($dpad) {
+            var touchId = null;
+            $dpad.touchstart(function(e) {
+                var touches = e.changedTouches;
+                var touch = touches[0];
+                touchId = touch.identifier;
+
+                var loc = {
+                    x: touch.pageX - $dpad.offset().left - $dpad.width()/2,
+                    y: touch.pageY - $dpad.offset().top - $dpad.height()/2
+                }
+                console.log(loc);
+                setLoc(loc);
+            });
+            // touchmove
+            $dpad.touchend(function(e) {
+                var touches = e.changedTouches;
+                for (var i=0; i<touches.length; i++) {
+                    if (touches[i].identifier == touchId) {
+                        touchId = null;
+                        setAction(null, 0);
+                    }
+                }
             });
         }
 
@@ -76,6 +116,7 @@
 
             handleKeys();
             handleMouse($dpad);
+            handleTouch($dpad);
 
             socket.on('sense', function(data) {
                 $('#sensor').html(data);

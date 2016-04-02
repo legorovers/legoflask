@@ -37,6 +37,7 @@ h2 {
 }
 #camera {
     position: relative;
+    margin-bottom: 15px;
 }
 #video {
     width: 400px;
@@ -59,6 +60,7 @@ h2 {
     right: 0;
     margin-left: auto;
     margin-right: auto;
+    pointer-events: none;
 }
 #dpad {
     position: relative;
@@ -81,8 +83,12 @@ h2 {
     right: 0;
     margin-left: auto;
     margin-right: auto;
+    pointer-events: none;
 }
 #credits {
     text-align: right;
     padding: 15px;
+}
+#credits img {
+    padding-left: 5px;
 }
