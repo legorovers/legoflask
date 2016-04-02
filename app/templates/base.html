@@ -86,7 +86,7 @@
 
         function handleTouch($dpad) {
             var touchId = null;
-            $dpad.touchstart(function(e) {
+            $dpad.on('touchstart', function(e) {
                 var touches = e.changedTouches;
                 var touch = touches[0];
                 touchId = touch.identifier;
@@ -99,7 +99,7 @@
                 setLoc(loc);
             });
             // touchmove
-            $dpad.touchend(function(e) {
+            $dpad.on('touchend', function(e) {
                 var touches = e.changedTouches;
                 for (var i=0; i<touches.length; i++) {
                     if (touches[i].identifier == touchId) {
