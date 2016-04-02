@@ -18,78 +18,26 @@ def page_not_found(error):
 def index():
     return render_template('index.html', title='WebRover1')
 
-@app.route('/forward/')
-def forward():
-    '''
-    Move the robot forward
-    '''
-    try:
+@socketio.on('action')
+def action(direction, speed):
+    if direction == 'forward':
         robot.forward()
-        return 'success'
-    except:
-        abort(404)
-
-@app.route('/stop/')
-def stop():
-    '''
-    Stop the robot
-    '''
-    try:
-        robot.stop()
-        return 'success'
-    except:
-        abort(404)
-
-@app.route('/reverse/')
-def backward():
-    try:
-        robot.backward()
-        return 'success'
-    except:
-        abort(404)
-
-
-@app.route('/right/')
-def right():
-    try:
-        robot.spin_right()
-        return 'success'
-    except Exception as e:
-        print e
-        abort(404)
-
-
-@app.route('/left/')
-def left():
-    try:
+    elif direction == 'left':
         robot.spin_left()
-        return 'success'
-    except:
-        abort(404)
-
-@app.route('/api/delay/<int:delay_in>')
-def set_delay(delay_in):
-    try:
-        robot.set_delay(delay_in/1000.0)
-        return 'success'
-    except:
-        abort(404)
-
-@app.route('/spin/')
-def spin():
-    return 'success'
-
-@app.route('/api/sense/')
-def distance():
-    try:
-        return jsonify(distance=robot.distance())
-    except Exception as e:
-        print e
-        abort(404)
+    elif direction == 'right':
+        robot.spin_right()
+    elif direction == 'reverse':
+        robot.backward()
+    else:
+        robot.stop()
 
 @socketio.on('delay')
 def handle_delay(delay):
     print('new delay: ' + delay)
+
+@socketio.on('rule')
+def handle_rule(rule):
+    print('new rule: ' + rule)
 
 @app.route('/api/rules/', methods=['GET', 'POST'])
 def rules():

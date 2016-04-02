@@ -15,11 +15,11 @@
 
         function setAction(direction, speed)
         {
-            if (direction != action.direction || speed != newAction.speed)
+            if (direction != action.direction || speed != action.speed)
             {
                 action.direction = direction;
                 action.speed = speed;
-                socket.emit('action', action);
+                socket.emit('action', direction, speed);
             }
         }
 
@@ -89,7 +89,7 @@
                 socket.emit('delay', $('#delay').val());
             });
             $('#rule').change(function() {
-                $.getJSON('api/rule/' + $('#rule').val() + '/ultrasonic/50');
+                socket.emit('rule', $('#rule').val());
             });
         }
 /*
