@@ -1,5 +1,6 @@
 import sys
 from time import sleep
+from shutil import copyfile
 from flask import Flask, abort, render_template, jsonify, request
 from flask_socketio import SocketIO
 
@@ -72,6 +73,7 @@ if __name__ == '__main__':
     else:
         import ev3
         robot = ev3
+    copyfile('/home/robot/webrover1/app/static/images/camera-offline.jpg', '/home/robot/webrover1/app/static/images/camera.jpg')
     thread = SensorThread(robot, socketio)
     print 'running socketio'
     socketio.run(app, host='0.0.0.0', port=5000) #, debug=True)
