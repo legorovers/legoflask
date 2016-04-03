@@ -47,3 +47,6 @@ cat GandiStandardSSLCA2.pem >> legorover.crt
 # TODO
 
 Make the jpeg snapshots the same size as the display (400x300)
+Find out why Chrome crashes on the camera page (eventually)
+Make the python server start automatically
+Remove the small delay on long press touchstart events

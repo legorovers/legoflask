@@ -17,6 +17,10 @@ assert lmotor.connected
 assert rmotor.connected
 
 ussensor = UltrasonicSensor()
+gyro = GyroSensor()
+# gyro.value() -- degrees, but needs a 0 value
+left = TouchSensor(INPUT_1)
+right = TouchSensor(INPUT_4)
 
 def _start():
     '''

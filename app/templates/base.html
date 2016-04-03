@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>{{ title }}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, user-scalable=no">
         <link type="text/css" href="/static/style.css" rel="Stylesheet"/>
         <script src="/static/jquery.min.js"></script>
         <script type="text/javascript" src="/static/socket.io-1.4.5.js"></script>
@@ -18,7 +18,7 @@
         {
             if (direction != action.direction || speed != action.speed)
             {
-                if (Date.now() - last > 250) {   // throttle events
+                if (direction != action.direction || Date.now() - last > 250) {   // throttle speed change events
                     action.direction = direction;
                     action.speed = speed;
                     socket.emit('action', direction, speed);
@@ -32,22 +32,22 @@
                 switch (e.which) {
                     case 37: // left
                     case 65: // a
-                        setAction('left', 100);
+                        setAction('left', 50);
                         break;
 
                     case 38: // up
                     case 87: // w
-                        setAction('forward', 100);
+                        setAction('forward', 50);
                         break;
 
                     case 39: // right
                     case 68: // d
-                        setAction('right', 100);
+                        setAction('right', 50);
                         break;
 
                     case 40: // down
                     case 83: // s
-                        setAction('reverse', 100);
+                        setAction('reverse', 50);
                         break;
 
                     default:
@@ -121,24 +121,14 @@
                 $dpad.on('touchmove', touchmove);
             });
             $dpad.on('touchend', function(e) {
-                var touches = e.changedTouches;
-                for (var i=0; i<touches.length; i++) {
-                    if (touches[i].identifier == touchId) {
-                        $dpad.off('touchmove', touchmove);
-                        touchId = null;
-                        setAction(null, 0);
-                    }
-                }
+                $dpad.off('touchmove', touchmove);
+                touchId = null;
+                setAction(null, 0);
             });
             $dpad.on('touchcancel', function(e) {
-                var touches = e.changedTouches;
-                for (var i=0; i<touches.length; i++) {
-                    if (touches[i].identifier == touchId) {
-                        $dpad.off('touchmove', touchmove);
-                        touchId = null;
-                        setAction(null, 0);
-                    }
-                }
+                $dpad.off('touchmove', touchmove);
+                touchId = null;
+                setAction(null, 0);
             });
         }
 

@@ -110,6 +110,7 @@ div.right {
 #dpad {
     position: relative;
     -webkit-user-select: none;
+    touch-action: none;
 }
 #dpad canvas {
     background: white url(/static/images/d-pad.gif) no-repeat center center;

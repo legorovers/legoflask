@@ -1,4 +1,5 @@
-Copyright (c) <2014>, <Paul Hallett>
+Copyright (c) 2014-2016, Paul Hallett, Mark Webb, Steve Lee, Andy Wood
+
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

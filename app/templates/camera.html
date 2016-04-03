@@ -4,7 +4,7 @@
     <title>WebRover1 Camera</title>
   </head>
   <body>
-    <div id="camera" style="width: 400px; height: 300px">
+    <div id="camera" style="width: 400px; height: 300px; max-height: 100%;">
       <div class="placeholder">
         Your browser does not support camera access.
       </div>
@@ -15,7 +15,7 @@
     <script>
       var camera = new JpegCamera("#camera", {shutter: false, scale: 0.5});
       var snapshots = [];
-      var delay = 1300;
+      var delay = 0;
       var uploaded = 0;
 
       camera.ready(function() {
@@ -46,7 +46,7 @@
             }
             snapshots.splice(0, index + 1);
           }
-        }, 200);
+        }, 250);
       });
     </script>
   </body>
