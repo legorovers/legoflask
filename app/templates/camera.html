@@ -38,6 +38,7 @@
               snapshots[index].img.show(); // Display the snapshot
               snapshots[index].img.upload({api_url: "/upload/"}).done(function(response) {
                 response_container.innerHTML = response;
+                delay = parseInt(response)
               }).fail(function(status_code, error_message, response) {
                 // ignore failures
               });

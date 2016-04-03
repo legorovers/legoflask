@@ -3,13 +3,14 @@ import time
 
 class SensorThread(object):
 
-    def __init__(self, robot, notify, delay=0):
-        self.robot = robot
+    def __init__(self, notify, delay=0):
         self.notify = notify
         self.delay = delay
         self.interval = 1
         self.distance = -1
 
+    def start(self, robot):
+        self.robot = robot
         thread = threading.Thread(target=self.run, args=())
         thread.daemon = True                            # Daemonize thread
         thread.start()                                  # Start the execution

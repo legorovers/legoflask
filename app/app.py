@@ -5,11 +5,15 @@ from flask import Flask, abort, render_template, jsonify, request
 from flask_socketio import SocketIO
 
 from sense import SensorThread
+from control import ControlThread
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'webrover1'
 socketio = SocketIO(app)
+sense = SensorThread(socketio)
+control = ControlThread()
+
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -20,22 +24,13 @@ def index():
     return render_template('index.html', title='WebRover1')
 
 @socketio.on('action')
-def action(direction, speed):
-    print speed
-    if direction == 'forward':
-        robot.forward()
-    elif direction == 'left':
-        robot.spin_left()
-    elif direction == 'right':
-        robot.spin_right()
-    elif direction == 'reverse':
-        robot.backward()
-    else:
-        robot.stop()
+def action(*args):
+    control.queue.put(args)
 
 @socketio.on('delay')
 def handle_delay(delay):
     print('new delay: ' + delay)
+    control.delay = int(delay)
 
 @socketio.on('rule')
 def handle_rule(rule):
@@ -63,7 +58,10 @@ def upload():
     file.write(request.get_data())
     file.close()
     socketio.emit('refresh')
-    return 'success'
+    return control.delay
+
+def camera_offline():
+    copyfile('/home/robot/webrover1/app/static/images/camera-offline.jpg', '/home/robot/webrover1/app/static/images/camera.jpg')
 
 
 if __name__ == '__main__':
@@ -73,7 +71,8 @@ if __name__ == '__main__':
     else:
         import ev3
         robot = ev3
-    copyfile('/home/robot/webrover1/app/static/images/camera-offline.jpg', '/home/robot/webrover1/app/static/images/camera.jpg')
-    thread = SensorThread(robot, socketio)
+    camera_offline()
+    sense.start(robot)
+    control.start(robot)
     print 'running socketio'
     socketio.run(app, host='0.0.0.0', port=5000) #, debug=True)
