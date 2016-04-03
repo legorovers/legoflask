@@ -84,6 +84,8 @@ h2 {
     margin-left: auto;
     margin-right: auto;
     pointer-events: none;
+    clip-path: circle(120px at center);
+    -webkit-clip-path: circle(120px at center);
 }
 #credits {
     text-align: right;
