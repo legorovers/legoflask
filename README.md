@@ -1,41 +1,7 @@
-LegoFlask
-===========
+# WebRover1
 
-A Flask server that can be run on the Raspberry Pi, to interface with Lego Mindstorms.
-
-
-## Setup
-
-Run the command:
-
-```
-make install
-```
-
-To install the server and all dependencies.
-
-## Run the server
-
-Run the command:
-
-```
-make run
-```
-
-
-## Uninstall
-
-You can remove the installation using the command:
-
-```
-make clean
-```
-
-
-
-## Developing via the USB Cable
-
-sshpass -pmaker rsync -avz -e ssh legoflask/ robot@ev3dev.local:/home/robot/webrover1/
+A web server controller for Mindstorms EV3 that allows you to remote control,
+and program, a Mars Rover-like robot.
 
 
 ## Running
@@ -56,6 +22,11 @@ Connect tablet to:
 Or local PC (you'll need to ignore the certificate errors or add an /etc/hosts entry):
 
     http://ev3dev.local/
+
+
+## Developing via the USB Cable
+
+sshpass -pmaker rsync -avz -e ssh legoflask/ robot@ev3dev.local:/home/robot/webrover1/
 
 
 ## Creating the Certificate Signing Request

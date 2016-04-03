@@ -70,22 +70,39 @@
         }
 
         function handleMouse($dpad) {
-            $dpad.mousedown(function(e) {
+            function mousemove(e) {
                 var loc = {
                     x: e.pageX - $dpad.offset().left - $dpad.width()/2,
                     y: e.pageY - $dpad.offset().top - $dpad.height()/2
                 }
-                console.log(loc);
                 setLoc(loc);
+            }
+            $dpad.mousedown(function(e) {
+                mousemove(e);
+                $dpad.on('mousemove', mousemove);
             });
-            // mousemove
             $dpad.mouseup(function(e) {
+                $dpad.off('mousemove', mousemove);
                 setAction(null, 0);
             });
         }
 
         function handleTouch($dpad) {
             var touchId = null;
+            function touchmove(e) {
+                var touches = e.changedTouches;
+                for (var i=0; i<touches.length; i++) {
+                    if (touches[i].identifier == touchId) {
+                        var touch = touches[i];
+                        var loc = {
+                            x: touch.pageX - $dpad.offset().left - $dpad.width()/2,
+                            y: touch.pageY - $dpad.offset().top - $dpad.height()/2
+                        }
+                        console.log(loc);
+                        setLoc(loc);
+                    }
+                }
+            }
             $dpad.on('touchstart', function(e) {
                 var touches = e.changedTouches;
                 var touch = touches[0];
@@ -97,12 +114,13 @@
                 }
                 console.log(loc);
                 setLoc(loc);
+                $dpad.on('touchmove', touchmove);
             });
-            // touchmove
             $dpad.on('touchend', function(e) {
                 var touches = e.changedTouches;
                 for (var i=0; i<touches.length; i++) {
                     if (touches[i].identifier == touchId) {
+                        $dpad.off('touchmove', touchmove);
                         touchId = null;
                         setAction(null, 0);
                     }

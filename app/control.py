@@ -24,13 +24,15 @@ class ControlThread(object):
 
     def action(self, direction, speed):
         print speed
+        # clamp to valid values
+        speed = min(100, max(25, speed))
         if direction == 'forward':
-            self.robot.forward()
+            self.robot.forward(speed)
         elif direction == 'left':
-            self.robot.spin_left()
+            self.robot.spin_left(speed)
         elif direction == 'right':
-            self.robot.spin_right()
+            self.robot.spin_right(speed)
         elif direction == 'reverse':
-            self.robot.backward()
+            self.robot.backward(speed)
         else:
             self.robot.stop()
