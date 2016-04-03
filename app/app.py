@@ -27,6 +27,13 @@ def index():
 def action(*args):
     control.queue.put(args)
 
+@socketio.on('camera')
+def camera(direction):
+    if direction == 'left':
+        robot.camera_left()
+    elif direction == 'right':
+        robot.camera_right()
+
 @socketio.on('delay')
 def handle_delay(delay):
     print('new delay: ' + delay)

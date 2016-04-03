@@ -35,9 +35,13 @@ h2 {
     margin-bottom: 0;
     padding-left: 15px;
 }
+
+div.left {
+    float: left;
+    width: 50px;
+}
 #camera {
     position: relative;
-    margin-bottom: 15px;
 }
 #video {
     width: 400px;
@@ -62,10 +66,52 @@ h2 {
     margin-right: auto;
     pointer-events: none;
 }
-#dpad {
+
+div.direction {
+    overflow: hidden;
+    width: 406px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px;
+}
+button {
+    border: 1px solid #17fdfb;
+    appearance: none;
+    box-shadow: none;
+    border-radius: 0;
+    background-color: transparent;
+    color: #17fdfb;
+}
+#look-left {
+    float: left;
+}
+#look-right {
+    float: right;
+}
+
+div.right {
+    float: right;
+    width: 50px;
+}
+#sensor {
+    border: 1px solid #17fdfb;
+    padding: 2px;
+    width: 15px;
+    height: 300px;
     position: relative;
 }
- #dpad canvas {
+#sensor div {
+    width: 15px;
+    background-color: #17fdfb;
+    position: absolute;
+    bottom: 2px;
+}
+
+#dpad {
+    position: relative;
+    -webkit-user-select: none;
+}
+#dpad canvas {
     background: white url(/static/images/d-pad.gif) no-repeat center center;
     border-radius: 100%;
     border: 1px dashed #333;

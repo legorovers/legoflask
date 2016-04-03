@@ -8,11 +8,19 @@
 
   <div id="cam">
     <h2>cam</h2>
-    <div id="camera">
-        <img id="video" src="/static/images/camera.jpg">
-        <div class="wash"></div>
-    </div>
-    <div id="sensor"></div>
+    <div class="container">
+      <div class="left">&nbsp;</div>
+      <div class="right"><div id="sensor"><div></div></div></div>
+      <div class="middle"></div>
+          <div id="camera">
+            <img id="video" src="/static/images/camera.jpg">
+            <div class="wash"></div>
+          </div>
+          <div class="direction">
+              <button id="look-left">&lt;</button>
+              <button id="look-right">&gt;</button>
+          </div>
+      </div>
   </div>
 
   <div id="nav">

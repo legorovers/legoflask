@@ -12,14 +12,18 @@
             direction: null,
             speed: 0
         };
+        var last = 0;
 
         function setAction(direction, speed)
         {
             if (direction != action.direction || speed != action.speed)
             {
-                action.direction = direction;
-                action.speed = speed;
-                socket.emit('action', direction, speed);
+                if (Date.now() - last > 250) {   // throttle events
+                    action.direction = direction;
+                    action.speed = speed;
+                    socket.emit('action', direction, speed);
+                    last = Date.now();
+                }
             }
         }
 
@@ -126,6 +130,16 @@
                     }
                 }
             });
+            $dpad.on('touchcancel', function(e) {
+                var touches = e.changedTouches;
+                for (var i=0; i<touches.length; i++) {
+                    if (touches[i].identifier == touchId) {
+                        $dpad.off('touchmove', touchmove);
+                        touchId = null;
+                        setAction(null, 0);
+                    }
+                }
+            });
         }
 
         function start() {
@@ -135,9 +149,17 @@
             handleKeys();
             handleMouse($dpad);
             handleTouch($dpad);
+            $('#look-left').click(function() {
+                socket.emit('camera', 'left');
+            });
+            $('#look-right').click(function() {
+                socket.emit('camera', 'right');
+            });
 
             socket.on('sense', function(data) {
-                $('#sensor').html(data);
+                var height = data/255*300;
+                console.log(height);
+                $('#sensor div').height(height);
             });
             socket.on('refresh', function() {
                 var src = $('#video').attr('src').split('?')[0]
