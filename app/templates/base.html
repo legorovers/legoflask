@@ -155,9 +155,19 @@
                 console.log(height);
                 $('#sensor div').height(height);
             });
+
+            var displayed = Date.now();
+            $('#video').on('load', function() {
+                displayed = null;
+            });
             socket.on('refresh', function() {
-                var src = $('#video').attr('src').split('?')[0]
-                $('#video').attr('src', src+'?'+Math.random())
+                console.log('refresh');
+                if (displayed == null || Date.now() > displayed + 5000) {
+                    console.log('updating');
+                    var src = $('#video').attr('src').split('?')[0]
+                    $('#video').attr('src', src+'?'+Math.random());
+                    displayed = Date.now();
+                }
             });
 
             $('#delay').change(function() {
