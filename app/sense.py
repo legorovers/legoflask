@@ -17,7 +17,7 @@ class SensorThread(object):
 
     def run(self):
         while True:
-            distance = self.robot.distance()
+            distance = int(self.robot.distance())
             if not self.distance == distance:
                 self.notify.emit('sense', distance)
                 self.distance = distance
