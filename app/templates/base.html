@@ -94,7 +94,7 @@
         function handleTouch($dpad) {
             var touchId = null;
             function touchmove(e) {
-                var touches = e.changedTouches;
+                var touches = e.originalEvent.changedTouches;
                 for (var i=0; i<touches.length; i++) {
                     if (touches[i].identifier == touchId) {
                         var touch = touches[i];
@@ -106,9 +106,10 @@
                         setLoc(loc);
                     }
                 }
+                return false;
             }
             $dpad.on('touchstart', function(e) {
-                var touches = e.changedTouches;
+                var touches = e.originalEvent.changedTouches;
                 var touch = touches[0];
                 touchId = touch.identifier;
 
@@ -119,16 +120,19 @@
                 console.log(loc);
                 setLoc(loc);
                 $dpad.on('touchmove', touchmove);
+                return false;
             });
             $dpad.on('touchend', function(e) {
                 $dpad.off('touchmove', touchmove);
                 touchId = null;
                 setAction(null, 0);
+                return false;
             });
             $dpad.on('touchcancel', function(e) {
                 $dpad.off('touchmove', touchmove);
                 touchId = null;
                 setAction(null, 0);
+                return false;
             });
         }
 
