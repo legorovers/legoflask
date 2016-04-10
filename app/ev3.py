@@ -73,12 +73,17 @@ def distance():
 
 def camera_left():
     global camera_pos
-    camera_pos -= 5
-    camera_pos = max(-50, camera_pos)
+    camera_pos -= 25
+    camera_pos = max(-150, camera_pos)
     cmotor.run_to_abs_pos(speed_regulation_enabled='on', speed_sp=100, position_sp=camera_pos)
 
 def camera_right():
     global camera_pos
-    camera_pos += 5
-    camera_pos = min(50, camera_pos)
+    camera_pos += 25
+    camera_pos = min(150, camera_pos)
+    cmotor.run_to_abs_pos(speed_regulation_enabled='on', speed_sp=100, position_sp=camera_pos)
+
+def camera_forward():
+    global camera_pos
+    camera_pos = 0
     cmotor.run_to_abs_pos(speed_regulation_enabled='on', speed_sp=100, position_sp=camera_pos)

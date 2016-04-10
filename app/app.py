@@ -28,11 +28,8 @@ def action(*args):
     control.operation('action', args)
 
 @socketio.on('camera')
-def camera(direction):
-    if direction == 'left':
-        robot.camera_left()
-    elif direction == 'right':
-        robot.camera_right()
+def camera(*args):
+    control.operation('camera', args)
 
 @socketio.on('delay')
 def handle_delay(delay):

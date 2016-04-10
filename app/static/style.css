@@ -81,6 +81,7 @@ button {
     border-radius: 0;
     background-color: transparent;
     color: #17fdfb;
+    outline: none;
 }
 #look-left {
     float: left;

@@ -29,7 +29,11 @@ class ControlThread(object):
                 delay_for = (task['timestamp'] + self.delay / 1000.0) - time.time()
                 if delay_for > 0:
                     time.sleep(delay_for)
-            self.action(*task['args'])
+            op = task['operation']
+            if op == 'action':
+                self.action(*task['args'])
+            elif op == 'camera':
+                self.camera(*task['args'])
 
     def action(self, direction, speed):
         print speed
@@ -45,3 +49,12 @@ class ControlThread(object):
             self.robot.backward(speed)
         else:
             self.robot.stop()
+
+    def camera(self, direction):
+        if direction == 'left':
+            self.robot.camera_left()
+        elif direction == 'right':
+            self.robot.camera_right()
+        else:
+            self.robot.camera_forward()
+
