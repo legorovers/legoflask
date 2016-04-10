@@ -14,13 +14,22 @@ class ControlThread(object):
         thread.daemon = True                            # Daemonize thread
         thread.start()                                  # Start the execution
 
+    def operation(self, operation, args):
+        self.queue.put({
+            'operation': operation,
+            'timestamp': time.time(),
+            'args': args
+        })
+
     def run(self):
         while True:
             task = self.queue.get()
-            if self.delay > 0:
-                time.sleep(self.delay / 1000)
-            self.action(*task)
             self.queue.task_done()
+            if self.delay > 0:
+                delay_for = (task['timestamp'] + self.delay / 1000.0) - time.time()
+                if delay_for > 0:
+                    time.sleep(delay_for)
+            self.action(*task['args'])
 
     def action(self, direction, speed):
         print speed

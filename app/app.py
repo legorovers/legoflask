@@ -1,6 +1,6 @@
 import sys
 from time import sleep
-from shutil import copyfile
+from shutil import copyfile, move
 from flask import Flask, abort, render_template, jsonify, request
 from flask_socketio import SocketIO
 
@@ -25,7 +25,7 @@ def index():
 
 @socketio.on('action')
 def action(*args):
-    control.queue.put(args)
+    control.operation('action', args)
 
 @socketio.on('camera')
 def camera(direction):
@@ -59,16 +59,19 @@ def rules():
 def camera():
     return render_template('camera.html')
 
+IMG_DIR = '/home/robot/webrover1/app/static/images/'
 @app.route('/upload/', methods=['POST'])
 def upload():
-    file = open('/home/robot/webrover1/app/static/images/camera.jpg', 'wb')
+    file = open(IMG_DIR + 'camera-upload.jpg', 'wb')
     file.write(request.get_data())
     file.close()
+    move(IMG_DIR + 'camera-upload.jpg', IMG_DIR + 'camera.jpg')
+    # delay is handled in the camera browser
     socketio.emit('refresh')
-    return control.delay
+    return str(control.delay)
 
 def camera_offline():
-    copyfile('/home/robot/webrover1/app/static/images/camera-offline.jpg', '/home/robot/webrover1/app/static/images/camera.jpg')
+    copyfile(IMG_DIR + 'camera-offline.jpg', IMG_DIR + 'camera.jpg')
 
 
 if __name__ == '__main__':
