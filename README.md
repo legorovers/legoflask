@@ -7,8 +7,7 @@ and program, a Mars Rover-like robot.
 ## Running
 
     ssh robot@ev3dev.local
-    workon webrover1
-    cd webrover1
+    sudo service webrover1 stop; workon webrover1; cd webrover1
     python app/app.py
 
 Setup a mobile phone to connect to:

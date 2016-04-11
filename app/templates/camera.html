@@ -4,49 +4,89 @@
     <title>WebRover1 Camera</title>
   </head>
   <body>
-    <div id="camera" style="width: 400px; height: 300px; max-height: 100%;">
+    <video id="video" width="400" height="300" autoplay></video>
+    <canvas id="canvas" width="400" height="300">
+    <!--div id="camera" style="width: 400px; height: 300px; max-height: 100%;">
       <div class="placeholder">
         Your browser does not support camera access.
       </div>
-    </div><br>
+    </div><br-->
 
+    <script src="/static/jquery.min.js"></script>
     <script type="text/javascript" src="/static/canvas-to-blob.min.js"></script>
-    <script type="text/javascript" src="/static/jpeg_camera_no_flash.min.js"></script>
     <script>
-      var camera = new JpegCamera("#camera", {shutter: false, scale: 0.5});
-      var snapshots = [];
-      var delay = 0;
-      var uploaded = 0;
+      window.addEventListener("DOMContentLoaded", function() {
+        // Grab elements, create settings, etc.
+        var canvas = document.getElementById("canvas"),
+            context = canvas.getContext("2d"),
+            video = document.getElementById("video"),
+            videoObj = { "video": true },
+            image_format= "jpeg",
+            jpeg_quality= 85,
+            errBack = function(error) {
+                console.log("Video capture error: ", error.code); 
+            };
 
-      camera.ready(function() {
+        if(navigator.getUserMedia) { // Standard
+            navigator.getUserMedia(videoObj, function(stream) {
+                video.src = stream;
+            }, errBack);
+        } else if(navigator.webkitGetUserMedia) { // WebKit-prefixed
+            navigator.webkitGetUserMedia(videoObj, function(stream){
+                video.src = window.URL.createObjectURL(stream);
+            }, errBack);
+        } else if(navigator.mozGetUserMedia) { // moz-prefixed
+            navigator.mozGetUserMedia(videoObj, function(stream){
+                video.src = window.URL.createObjectURL(stream);
+            }, errBack);
+        }
+        video.play();
+
+        function capture(done) {
+            context.drawImage(video, 0, 0, 400, 300);
+            canvas.toBlob(done, "image/jpeg", 0.85);
+        };
+
+        function upload(data, done) {
+            $.ajax({
+              type: "POST",
+              url: "/upload/",
+              data: data,
+              contentType: "image/jpeg",
+              processData: false
+            }).done(done);
+        };
+
+        var snapshots = [];
+        var delay = 0;
+        var uploading = 0;
         setInterval(function() {
           var timestamp = Date.now();
-          var snapshot = camera.capture();
-          var length = snapshots.push({ts: timestamp, img: snapshot});
+          capture(function(snapshot) {
+            var length = snapshots.push({ts: timestamp, img: snapshot});
 
-          var index = -1;
-          for (var i = 0; i < length; i++) {
-            if (snapshots[i].ts > timestamp - delay) {
-              break;
+            var index = -1;
+            for (var i = 0; i < length; i++) {
+              if (snapshots[i].ts > timestamp - delay) {
+                break;
+              }
+              index = i;
             }
-            index = i;
-          }
-          if (index >= 0)
-          {
-            // avoid flooding the server
-            if (Date.now() > uploaded + 300) {
-              snapshots[index].img.show(); // Display the snapshot
-              snapshots[index].img.upload({api_url: "/upload/"}).done(function(response) {
-                delay = parseInt(response)
-              }).fail(function(status_code, error_message, response) {
-                // ignore failures
-              });
-              uploaded = Date.now();
+            if (index >= 0)
+            {
+              // avoid flooding the server
+              if (Date.now() > uploading + 400) {
+                upload(snapshots[index].img, function(response) {
+                  delay = parseInt(response)
+                });
+                uploading = Date.now();
+              }
+              snapshots.splice(0, index + 1);
             }
-            snapshots.splice(0, index + 1);
-          }
-        }, 333);
-      });
+          });
+        }, 500);
+
+      }, false);
     </script>
   </body>
 </html>
