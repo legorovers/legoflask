@@ -6,7 +6,7 @@ from flask_socketio import SocketIO
 
 from sense import SensorThread
 from control import ControlThread
-from rules import RuleEngine
+from rules import Rule, RuleEngine
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'webrover1'
@@ -44,12 +44,14 @@ def handle_rule(rule):
 def rules():
     if request.method == 'POST':
         print request.json
+        compiled_rules = []
         for rule in request.json:
             title = rule['title']
             trigger = rule['trigger']
             actions = rule['actions']
             print "rule: %s" % title
-            rule_engine.compile(trigger['title'], (a['title'] for a in actions))
+            compiled_rules.append(Rule(trigger['title'], (a['title'] for a in actions)))
+        rule_engine.activate(compiled_rules)
     return jsonify(result='ok')
 
 
