@@ -138,6 +138,9 @@
 
         function start() {
             socket = io.connect('http://' + document.domain, {transports: ['websocket']});
+            socket.on('connect', function() {
+                socket.emit('delay', $('#delay').val());
+            });
             var $dpad = $('canvas');
 
             handleKeys();
