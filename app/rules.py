@@ -4,9 +4,12 @@ class RuleEngine(object):
 
     def __init__(self, control):
         self.control = control
+        self.trigger = None
 
     def check(self, distance, touch_left, touch_right, direction):
-        if distance == 0 or touch_left or touch_right:
+        if (self.trigger == 'left obstacle' and touch_left) \
+               or (self.trigger == 'right obstacle' and touch_right) \
+               or (self.trigger == 'proximity' and distance < 8):
             self.control.program(*self.code)
 
     def compile(self, trigger, actions):
