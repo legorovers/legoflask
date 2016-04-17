@@ -34,7 +34,7 @@ def camera(*args):
 @socketio.on('delay')
 def handle_delay(delay):
     print('new delay: ' + delay)
-    control.delay = int(delay)
+    control.set_delay(int(delay))
 
 @socketio.on('rule')
 def handle_rule(rule):
@@ -79,7 +79,6 @@ if __name__ == '__main__':
         import ev3
         robot = ev3
     camera_offline()
-    sense.start(robot)
-    control.start(robot)
+    control.start(sense, robot)
     print 'running socketio'
     socketio.run(app, host='0.0.0.0', port=5000) #, debug=True)

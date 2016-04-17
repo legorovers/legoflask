@@ -9,7 +9,8 @@ class SensorThread(object):
         self.interval = 0.333
         self.distance = -1
 
-    def start(self, robot):
+    def start(self, control, robot):
+        self.control = control
         self.robot = robot
         thread = threading.Thread(target=self.run, args=())
         thread.daemon = True                            # Daemonize thread
@@ -18,9 +19,15 @@ class SensorThread(object):
     def run(self):
         while True:
             distance = int(self.robot.distance())
-            print "sense: %s %s %s" % (self.robot.touch_left(), self.robot.touch_right(), self.robot.direction())
-            if not self.distance == distance:
-                self.notify.emit('sense', distance)
-                self.distance = distance
-                print "distance %scm" % distance
+            touch_left = self.robot.touch_left()
+            touch_right = self.robot.touch_right()
+            direction = self.robot.direction()
+            self.control.readings(distance, touch_left, touch_right, direction)
             time.sleep(self.interval)
+
+    def sensors(self, distance, touch_left, touch_right, direction):
+        print "sense: %s %s %s" % (touch_left, touch_right, direction)
+        if not self.distance == distance:
+            self.notify.emit('sense', distance)
+            self.distance = distance
+            print "distance %scm" % distance
