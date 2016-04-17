@@ -18,7 +18,6 @@ assert rmotor.connected
 
 ussensor = UltrasonicSensor()
 gyro = GyroSensor()
-# gyro.value() -- degrees, but needs a 0 value
 left = TouchSensor(INPUT_1)
 right = TouchSensor(INPUT_4)
 
@@ -70,6 +69,15 @@ def spin_left(speed=50):
 
 def distance():
     return ussensor.value() / 10.0
+
+def touch_left():
+    return left.value() == 1
+
+def touch_right():
+    return right.value() == 1
+
+def direction():
+    return gyro.value() % 360  # degrees, but needs a 0 value
 
 def camera_left():
     global camera_pos
