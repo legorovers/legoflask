@@ -9,8 +9,9 @@ class ControlThread(object):
         self.queue = Queue()
         self.sleep = threading.Condition()
 
-    def start(self, sense, robot):
+    def start(self, sense, rules, robot):
         self.sense = sense
+        self.rules = rules
         self.robot = robot
         sense.start(self, robot)
         thread = threading.Thread(target=self.run, args=())
@@ -27,21 +28,22 @@ class ControlThread(object):
         })
 
     def readings(self, *args):
-        self.rule_check(*args)
+        self.rules.check(*args)
         self.queue.put({
             'operation': 'sensors',
             'timestamp': time.time(),
             'args': args
         })
 
-    def rule_check(self, distance, touch_left, touch_right, direction):
-        if distance == 0 or touch_left or touch_right:
-            self._drain_queue()
-            self.operation('action', ('reverse', 40), 0)
-            self.operation('action', ('stop', None), 0.5)
-            self.sleep.acquire()
-            self.sleep.notify()
-            self.sleep.release()
+    def program(self, *actions):
+        self._drain_queue()
+        for i in range(0, len(actions), 2):
+            delay_s = actions[i]
+            action = actions[i+1]
+            self.operation('action', action, delay_s)
+        self.sleep.acquire()
+        self.sleep.notify()
+        self.sleep.release()
 
     def _drain_queue(self):
         while not self.queue.empty():

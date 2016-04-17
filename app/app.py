@@ -6,14 +6,14 @@ from flask_socketio import SocketIO
 
 from sense import SensorThread
 from control import ControlThread
-
+from rules import RuleEngine
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'webrover1'
 socketio = SocketIO(app)
 sense = SensorThread(socketio)
 control = ControlThread()
-
+rule_engine = RuleEngine(control)
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -49,6 +49,7 @@ def rules():
             trigger = rule['trigger']
             actions = rule['actions']
             print "rule: %s" % title
+            rule_engine.compile(trigger['title'], (a['title'] for a in actions))
     return jsonify(result='ok')
 
 
@@ -79,6 +80,6 @@ if __name__ == '__main__':
         import ev3
         robot = ev3
     camera_offline()
-    control.start(sense, robot)
+    control.start(sense, rule_engine, robot)
     print 'running socketio'
     socketio.run(app, host='0.0.0.0', port=5000) #, debug=True)
