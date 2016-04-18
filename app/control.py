@@ -1,5 +1,6 @@
 import threading
 import time
+import math
 from Queue import Queue
 
 class ControlThread(object):
@@ -55,7 +56,7 @@ class ControlThread(object):
 
     def set_delay(self, delay):
         self._drain_queue()
-        self.operation('action', ('stop', None), 0)
+        self.operation('action', (None, 0), 0)  # Stop everything!
         self.delay = delay
 
     def run(self):
@@ -78,6 +79,8 @@ class ControlThread(object):
 
     def action(self, direction, speed):
         print speed
+        # scale quadratic, for easier control
+        speed = math.sqrt(speed) * 7.0
         # clamp to valid values
         speed = min(100, max(25, speed))
         if direction == 'forward':

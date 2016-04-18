@@ -12,7 +12,7 @@ class Rule(object):
             if a == 'back':
                 action = ('reverse', 40)
             elif a == 'stop':
-                action = ('stop', None)
+                action = (None, 0)
             else:   # forward, left, right
                 action = (a, 40)
             self.code.append(time)
