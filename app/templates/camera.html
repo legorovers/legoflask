@@ -44,7 +44,8 @@
 
         function capture(done) {
             context.drawImage(video, 0, 0, 400, 300);
-            canvas.toBlob(done, "image/jpeg", 0.85);
+            //canvas.toBlob(done, "image/jpeg", 0.85);
+            done(canvas.toDataURL("image/jpeg", 0.85));
         };
 
         function upload(data, done) {
@@ -59,10 +60,14 @@
 
         var snapshots = [];
         var delay = 0;
-        var uploading = 0;
+        var uploading = null;
+        function uploaded(response) {
+          delay = parseInt(response)
+          uploading = null;
+        };
         setInterval(function() {
           var timestamp = Date.now();
-          capture(function(snapshot) {
+          function process(snapshot) {
             var length = snapshots.push({ts: timestamp, img: snapshot});
 
             var index = -1;
@@ -75,15 +80,14 @@
             if (index >= 0)
             {
               // avoid flooding the server
-              if (Date.now() > uploading + 400) {
-                upload(snapshots[index].img, function(response) {
-                  delay = parseInt(response)
-                });
+              if (uploading == null || Date.now() > uploading + 5000) {
                 uploading = Date.now();
+                upload(snapshots[index].img, uploaded);
               }
               snapshots.splice(0, index + 1);
             }
-          });
+          };
+          capture(process);
         }, 500);
 
       }, false);

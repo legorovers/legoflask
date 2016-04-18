@@ -137,7 +137,8 @@
         }
 
         function start() {
-            socket = io.connect('http://' + document.domain, {transports: ['websocket']});
+            //socket = io.connect('http://' + document.domain, {transports: ['websocket']});
+            socket = io.connect('wss://legorover.space', {transports: ['websocket']});
             socket.on('connect', function() {
                 socket.emit('delay', $('#delay').val());
             });
@@ -159,19 +160,31 @@
                 $('#sensor div').height(height);
             });
 
-            var displayed = Date.now();
-            $('#video').on('load', function() {
-                displayed = null;
+            var requested = Date.now();
+            var video = document.getElementById("video");
+            $(video).on('load', function() {
+                console.log('loaded ' + (requested - Date.now()));
+                requested = null;
             });
-            socket.on('refresh', function() {
-                console.log('refresh');
-                if (displayed == null || Date.now() > displayed + 5000) {
-                    console.log('updating');
-                    var src = $('#video').attr('src').split('?')[0]
-                    $('#video').attr('src', src+'?'+Math.random());
-                    displayed = Date.now();
+            setInterval(function() {
+                if (requested == null || Date.now() > requested + 5000) {
+                    requested = Date.now();
+                    // video.src = videoSrc + '#' + requested;
+                    $.ajax({
+                        //url: 'https://legorover.space/static/images/camera.data',
+                        url: '/static/images/camera.data',
+                        headers: {'Max-Age':0},
+                        success: function(data){
+                            video.src = data;
+                        },
+                        error: function(){/*handle error*/},
+                        complete: function(){/* handle complete*/}
+                    });
+                    console.log('requested');
+                } else {
+                    console.log('skipped ' + (requested == null ? 'null' : Date.now() - requested));
                 }
-            });
+            }, 250);
 
             $('#delay').change(function() {
                 socket.emit('delay', $('#delay').val());

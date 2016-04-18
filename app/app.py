@@ -1,5 +1,7 @@
+import os
 import sys
-from time import sleep
+import time
+import gevent
 from shutil import copyfile, move
 from flask import Flask, abort, render_template, jsonify, request
 from flask_socketio import SocketIO
@@ -62,16 +64,22 @@ def camera():
 IMG_DIR = '/home/robot/webrover1/app/static/images/'
 @app.route('/upload/', methods=['POST'])
 def upload():
-    file = open(IMG_DIR + 'camera-upload.jpg', 'wb')
+    ts = time.time()
+    file = open(IMG_DIR + 'camera-upload.data', 'wb')
     file.write(request.get_data())
     file.close()
-    move(IMG_DIR + 'camera-upload.jpg', IMG_DIR + 'camera.jpg')
+    move(IMG_DIR + 'camera-upload.data', IMG_DIR + 'camera.data')
+    print "upload (took %sms)" % ((time.time() - ts) * 1000)
     # delay is handled in the camera browser
-    socketio.emit('refresh')
+    #socketio.emit('refresh')
+    #gevent.sleep(0)           # flush emit messages
     return str(control.delay)
 
 def camera_offline():
-    copyfile(IMG_DIR + 'camera-offline.jpg', IMG_DIR + 'camera.jpg')
+    try:
+        os.remove(IMG_DIR + 'camera.data')
+    except OSError:
+        pass
 
 
 if __name__ == '__main__':
