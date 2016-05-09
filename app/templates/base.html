@@ -7,7 +7,7 @@
         <script src="/static/jquery.min.js"></script>
         <script type="text/javascript" src="/static/socket.io-1.4.5.js"></script>
         <script type="text/javascript">
-        var socket, peerConnection;
+        var socket, peerConnection, dataChannel;
         var action = {
             direction: null,
             speed: 0
@@ -204,15 +204,15 @@
                 console.log('answer ice');
             }
 
-            // var dataChannel = peerConnection.createDataChannel("datachannel", {reliable: false});
+            dataChannel = peerConnection.createDataChannel('camera', {reliable: false});
+            dataChannel.onmessage = function(e){console.log("DC message:" +e.data);}
+            dataChannel.onopen = function(){console.log("------ DATACHANNEL OPENED ------")};
+            dataChannel.onclose = function(){console.log("------ DC closed! ------")};
+            dataChannel.onerror = function(){console.log("DC ERROR!!!")};
 
             peerConnection.ondatachannel = function (e) {
                 console.log('peerConnection.ondatachannel event fired.');
-                var dataChannel = e.channel;
-                dataChannel.onmessage = function(e){console.log("DC message:" +e.data);}
-                dataChannel.onopen = function(){console.log("------ DATACHANNEL OPENED ------")};
-                dataChannel.onclose = function(){console.log("------ DC closed! ------")};
-                dataChannel.onerror = function(){console.log("DC ERROR!!!")};
+                // dataChannel = e.channel;
             };
 
             socket.on('offer', function(offer) {

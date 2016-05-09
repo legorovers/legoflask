@@ -50,6 +50,7 @@ Remove the small delay on long press touchstart events ?
 WebRTC
 https://io2014codelabs.appspot.com/static/codelabs/webrtc-file-sharing/#7
 http://www.justgoscha.com/programming/2014/03/07/simple-webrtc-datachannel-establishment-for-dummies.html
+https://www.webrtc-experiment.com/docs/how-to-use-rtcdatachannel.html#rtp-chrome
 sudo apt-get install rfc5766-turn-server
 less /etc/turnserver.conf
 sudo service rfc5766-turn-server start

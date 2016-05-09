@@ -102,7 +102,7 @@
             console.log(e.candidate);
         }
 
-        dataChannel = peerConnection.createDataChannel("datachannel", {reliable: false});
+        dataChannel = peerConnection.createDataChannel('camera', {reliable: false});
         dataChannel.onmessage = function(e){console.log("DC message:" +e.data);};
         dataChannel.onopen = function(){console.log("------ DATACHANNEL OPENED ------"); dataChannel.send('hello!');}
         dataChannel.onclose = function(){
