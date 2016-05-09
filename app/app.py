@@ -4,7 +4,7 @@ import time
 import gevent
 from shutil import copyfile, move
 from flask import Flask, abort, render_template, jsonify, request
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 
 from sense import SensorThread
 from control import ControlThread
@@ -81,6 +81,24 @@ def camera_offline():
     except OSError:
         pass
 
+# just pass these on for rtc
+@socketio.on('offer')
+def offer(data):
+    print 'offer'
+    emit('offer', data, broadcast=True)
+@socketio.on('answer')
+def answer(data):
+    print 'answer'
+    emit('answer', data, broadcast=True)
+@socketio.on('offer ice')
+def offer_ice(data):
+    print 'offer ice'
+    emit('offer ice', data, broadcast=True)
+@socketio.on('answer ice')
+def answer_ice(data):
+    print 'answer ice'
+    emit('answer ice', data, broadcast=True)
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'nxt2':
@@ -90,6 +108,6 @@ if __name__ == '__main__':
         import ev3
         robot = ev3
     camera_offline()
-    control.start(sense, rule_engine, robot)
+    #control.start(sense, rule_engine, robot)
     print 'running socketio'
     socketio.run(app, host='0.0.0.0', port=5000) #, debug=True)

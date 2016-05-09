@@ -16,11 +16,11 @@ Setup a mobile phone to connect to:
 
 Connect tablet to:
 
-    http://legorover.space/
+    https://legorover.space/
 
 Or local PC (you'll need to ignore the certificate errors or add an /etc/hosts entry):
 
-    http://ev3dev.local/
+    https://ev3dev.local/
 
 
 ## Developing via the USB Cable
@@ -45,7 +45,11 @@ cat GandiStandardSSLCA2.pem >> legorover.crt
 
 # TODO
 
-Make the jpeg snapshots the same size as the display (400x300)
-Find out why Chrome crashes on the camera page (eventually)
-Make the python server start automatically
-Remove the small delay on long press touchstart events
+Remove the small delay on long press touchstart events ?
+
+WebRTC
+https://io2014codelabs.appspot.com/static/codelabs/webrtc-file-sharing/#7
+http://www.justgoscha.com/programming/2014/03/07/simple-webrtc-datachannel-establishment-for-dummies.html
+sudo apt-get install rfc5766-turn-server
+less /etc/turnserver.conf
+sudo service rfc5766-turn-server start

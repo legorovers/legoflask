@@ -7,7 +7,7 @@
         <script src="/static/jquery.min.js"></script>
         <script type="text/javascript" src="/static/socket.io-1.4.5.js"></script>
         <script type="text/javascript">
-        var socket;
+        var socket, peerConnection;
         var action = {
             direction: null,
             speed: 0
@@ -166,7 +166,7 @@
                 console.log('loaded ' + (requested - Date.now()));
                 requested = null;
             });
-            setInterval(function() {
+            /*setInterval(function() {
                 if (requested == null || Date.now() > requested + 5000) {
                     requested = Date.now();
                     // video.src = videoSrc + '#' + requested;
@@ -177,14 +177,14 @@
                         success: function(data){
                             video.src = data;
                         },
-                        error: function(){/*handle error*/},
-                        complete: function(){/* handle complete*/}
+                        error: function(){},
+                        complete: function(){}
                     });
                     console.log('requested');
                 } else {
                     console.log('skipped ' + (requested == null ? 'null' : Date.now() - requested));
                 }
-            }, 250);
+            }, 250);*/
 
             $('#delay').change(function() {
                 socket.emit('delay', $('#delay').val());
@@ -192,6 +192,49 @@
             $('#rule').change(function() {
                 socket.emit('rule', $('#rule').val());
             });
+
+
+            var config = {"iceServers": []}; //"iceServers": [{'url': 'stun:legorover.space:3478'}]};
+            var connection = { 'optional': [{'DtlsSrtpKeyAgreement': true}, {'RtpDataChannels': true}] };
+
+            peerConnection = new webkitRTCPeerConnection(config, connection);
+            peerConnection.onicecandidate = function(e) {
+                if (!peerConnection || !e || !e.candidate) return;
+                socket.emit('answer ice', e.candidate); //JSON.stringify(e.candidate));
+                console.log('answer ice');
+            }
+
+            // var dataChannel = peerConnection.createDataChannel("datachannel", {reliable: false});
+
+            peerConnection.ondatachannel = function (e) {
+                console.log('peerConnection.ondatachannel event fired.');
+                var dataChannel = e.channel;
+                dataChannel.onmessage = function(e){console.log("DC message:" +e.data);}
+                dataChannel.onopen = function(){console.log("------ DATACHANNEL OPENED ------")};
+                dataChannel.onclose = function(){console.log("------ DC closed! ------")};
+                dataChannel.onerror = function(){console.log("DC ERROR!!!")};
+            };
+
+            socket.on('offer', function(offer) {
+                console.log('received offer');
+                console.log(offer);
+                peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+                var sdpConstraints = {'mandatory': {'OfferToReceiveAudio': false, 'OfferToReceiveVideo': false}};
+                peerConnection.createAnswer(function (sdp) {
+                  peerConnection.setLocalDescription(sdp);
+                  socket.emit('answer', sdp);
+                  console.log("------ SEND ANSWER ------");
+                }, function (err) {
+                  console.log("-create answer error " + err);
+                }, sdpConstraints);
+            });
+            socket.on('offer ice', function processIce(iceCandidate) {
+                console.log('offer ice');
+                console.log(iceCandidate);
+                //var iceCandidate = JSON.parse(data);
+                peerConnection.addIceCandidate(new RTCIceCandidate(iceCandidate));
+            });
+
         }
 /*
     canvas.style.backgroundImage = "url('/static/images/d-pad-left.gif')";

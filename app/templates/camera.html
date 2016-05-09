@@ -13,8 +13,10 @@
     </div><br-->
 
     <script src="/static/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/socket.io-1.4.5.js"></script>
     <script type="text/javascript" src="/static/canvas-to-blob.min.js"></script>
     <script>
+      var socket, peerConnection, dataChannel;
       window.addEventListener("DOMContentLoaded", function() {
         // Grab elements, create settings, etc.
         var canvas = document.getElementById("canvas"),
@@ -63,7 +65,7 @@
           delay = parseInt(response)
           uploading = null;
         };
-        setInterval(function() {
+        /*setInterval(function() {
           var timestamp = Date.now();
           function process(snapshot) {
             var length = snapshots.push({ts: timestamp, img: snapshot});
@@ -86,7 +88,52 @@
             }
           };
           capture(process);
-        }, 500);
+        }, 500); */
+
+        socket = io.connect('wss://legorover.space', {transports: ['websocket']});
+
+        var config = {"iceServers": []}; //"iceServers": [{'url': 'stun:legorover.space:3478'}]};
+        var connection = {'optional': [{'DtlsSrtpKeyAgreement': true}, {'RtpDataChannels': true}]};
+        peerConnection = new webkitRTCPeerConnection(config, connection);
+        peerConnection.onicecandidate = function(e) {
+            if (!peerConnection || !e || !e.candidate) return;
+            socket.emit('offer ice', e.candidate); //JSON.stringify(e.candidate));
+            console.log('offer ice');
+            console.log(e.candidate);
+        }
+
+        dataChannel = peerConnection.createDataChannel("datachannel", {reliable: false});
+        dataChannel.onmessage = function(e){console.log("DC message:" +e.data);};
+        dataChannel.onopen = function(){console.log("------ DATACHANNEL OPENED ------"); dataChannel.send('hello!');}
+        dataChannel.onclose = function(){
+          console.log("------- DC closed! -------");
+        };
+        dataChannel.onerror = function(){console.log("DC ERROR!!!");};
+
+        socket.on('connect', function() {
+          var sdpConstraints = {'mandatory': {'OfferToReceiveAudio': false, 'OfferToReceiveVideo': false}};
+          peerConnection.createOffer(function (sdp) {
+            peerConnection.setLocalDescription(sdp);
+            socket.emit('offer', sdp);
+            console.log("------ SEND OFFER ------");
+          }, function (err) {
+            console.log('offer error ' + err);
+          }, sdpConstraints);
+        });
+
+        socket.on('answer ice', function (iceCandidate) {
+          console.log('answer ice');
+          console.log(iceCandidate);
+          //var iceCandidate = JSON.parse(data);
+          peerConnection.addIceCandidate(new RTCIceCandidate(iceCandidate));
+        });
+        socket.on('answer', function processAnswer(answer) {
+          peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+          console.log("------ PROCESSED ANSWER ------");
+          // seems to stop here, never receives answer ice, then datachannel.onclose called
+        });
+
+
 
       }, false);
     </script>
