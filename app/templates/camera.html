@@ -109,32 +109,36 @@
             dataChannel.onopen = function(){
               console.log("------ DATACHANNEL OPENED ------")
 
-              context.drawImage(video, 0, 0, 400, 300);
+              setInterval(function() {
 
+                context.drawImage(video, 0, 0, 400, 300);
 
-              // Split data channel message in chunks
-              var CHUNK_LEN = 64000;
-              // Get the image bytes and calculate the number of chunks
-              var img = context.getImageData(0, 0, 400, 300);
-              var len = img.data.byteLength;
-              var n = len / CHUNK_LEN | 0;
-              // Let the other peer know in advance how many bytes to expect in total
-              dataChannel.send(len);
-              // Split the photo in chunks and send it over the data channel
-              for (var i = 0; i < n; i++) {
-                 var start = i * CHUNK_LEN;
-                 var end = (i+1) * CHUNK_LEN;
-                 dataChannel.send(img.data.subarray(start, end));
-              }
-              // Send the reminder, if any
-              if (len % CHUNK_LEN) {
-                 dataChannel.send(img.data.subarray(n * CHUNK_LEN));
-              }
+                // Split data channel message in chunks
+                var CHUNK_LEN = 64000;
+                // Get the image bytes and calculate the number of chunks
+                canvas.toBlob(function(blob) {
+                  var reader = new FileReader();
+                  reader.addEventListener("loadend", function() {
+                    var data = new Uint8ClampedArray(reader.result);
+                    var len = data.length;
+                    var n = len / CHUNK_LEN | 0;
+                    // Let the other peer know in advance how many bytes to expect in total
+                    dataChannel.send(len);
+                    // Split the photo in chunks and send it over the data channel
+                    for (var i = 0; i < n; i++) {
+                       var start = i * CHUNK_LEN;
+                       var end = (i+1) * CHUNK_LEN;
+                       dataChannel.send(data.subarray(start, end));
+                    }
+                    // Send the reminder, if any
+                    if (len % CHUNK_LEN) {
+                       dataChannel.send(data.subarray(n * CHUNK_LEN));
+                    }
+                  });
+                  reader.readAsArrayBuffer(blob);
+                }, "image/jpeg", 0.85);
 
-
-
-
-
+              }, 1000);
             };
             dataChannel.onclose = function(){console.log("------ DC closed! ------")};
             dataChannel.onerror = function(){console.log("DC ERROR!!!")};

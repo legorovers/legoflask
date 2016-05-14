@@ -193,17 +193,12 @@
                 socket.emit('rule', $('#rule').val());
             });
 
-            var buf, count;
+            var buf, count, canvas;
 
             function renderPhoto(data) {
-                 $(video).parent().html('<canvas id="video" width="400" height="300" />');
-                 //var photo = document.createElement('canvas');
-                 //video.insertBefore(photo);
-                 var photo = document.getElementById('video');
-                 var canvas = photo.getContext('2d');
-                 var img = canvas.createImageData(400, 300);
-                 img.data.set(data);
-                 canvas.putImageData(img, 0, 0);
+                var blob = new Blob([data], {type: 'image/jpeg'});
+                var url = URL.createObjectURL(blob);
+                video.src = url;
             }
 
             var config = {"iceServers": []};
