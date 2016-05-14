@@ -194,45 +194,42 @@
             });
 
 
-            var config = {"iceServers": []}; //"iceServers": [{'url': 'stun:legorover.space:3478'}]};
-            var connection = { 'optional': [{'DtlsSrtpKeyAgreement': true}, {'RtpDataChannels': true}] };
-
-            peerConnection = new webkitRTCPeerConnection(config); //, connection);
+            var config = {"iceServers": []};
+            peerConnection = new webkitRTCPeerConnection(config);
             peerConnection.onicecandidate = function(e) {
                 if (!peerConnection || !e || !e.candidate) return;
-                socket.emit('answer ice', e.candidate); //JSON.stringify(e.candidate));
-                console.log('answer ice');
+                socket.emit('offer ice', e.candidate);
+                console.log('offer ice');
+                console.log(e.candidate);
             }
 
-            //dataChannel = peerConnection.createDataChannel('camera', {reliable: false});
-
-            peerConnection.ondatachannel = function (e) {
-                console.log('peerConnection.ondatachannel event fired.');
-                dataChannel = e.channel;
-                dataChannel.onmessage = function(e){console.log("DC message:" +e.data);}
-                dataChannel.onopen = function(){console.log("------ DATACHANNEL OPENED ------")};
-                dataChannel.onclose = function(){console.log("------ DC closed! ------")};
-                dataChannel.onerror = function(){console.log("DC ERROR!!!")};
+            dataChannel = peerConnection.createDataChannel('camera', {});
+            dataChannel.onmessage = function(e){console.log("DC message:" +e.data);};
+            dataChannel.onopen = function(){console.log("------ DATACHANNEL OPENED ------"); dataChannel.send('hello!');}
+            dataChannel.onclose = function(){
+              console.log("------- DC closed! -------");
             };
+            dataChannel.onerror = function(){console.log("DC ERROR!!!");};
 
-            socket.on('offer', function(offer) {
-                console.log('received offer');
-                console.log(offer);
-                peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
-                var sdpConstraints = {'mandatory': {'OfferToReceiveAudio': false, 'OfferToReceiveVideo': false}};
-                peerConnection.createAnswer(function (sdp) {
-                  peerConnection.setLocalDescription(sdp);
-                  socket.emit('answer', sdp);
-                  console.log("------ SEND ANSWER ------");
-                }, function (err) {
-                  console.log("-create answer error " + err);
-                }, sdpConstraints);
+            socket.on('connect', function() {
+              var sdpConstraints = {'mandatory': {'OfferToReceiveAudio': false, 'OfferToReceiveVideo': false}};
+              peerConnection.createOffer(function (sdp) {
+                peerConnection.setLocalDescription(sdp);
+                socket.emit('offer', sdp);
+                console.log("------ SEND OFFER ------");
+              }, function (err) {
+                console.log('offer error ' + err);
+              }, sdpConstraints);
             });
-            socket.on('offer ice', function processIce(iceCandidate) {
-                console.log('offer ice');
-                console.log(iceCandidate);
-                //var iceCandidate = JSON.parse(data);
-                peerConnection.addIceCandidate(new RTCIceCandidate(iceCandidate));
+
+            socket.on('answer ice', function (iceCandidate) {
+              console.log('answer ice');
+              console.log(iceCandidate);
+              peerConnection.addIceCandidate(new RTCIceCandidate(iceCandidate));
+            });
+            socket.on('answer', function processAnswer(answer) {
+              peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+              console.log("------ PROCESSED ANSWER ------");
             });
 
         }
