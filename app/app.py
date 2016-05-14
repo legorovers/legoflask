@@ -108,6 +108,6 @@ if __name__ == '__main__':
         import ev3
         robot = ev3
     camera_offline()
-    #control.start(sense, rule_engine, robot)
+    control.start(sense, rule_engine, robot)
     print 'running socketio'
     socketio.run(app, host='0.0.0.0', port=5000) #, debug=True)
