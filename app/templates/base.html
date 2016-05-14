@@ -193,6 +193,18 @@
                 socket.emit('rule', $('#rule').val());
             });
 
+            var buf, count;
+
+            function renderPhoto(data) {
+                 $(video).parent().html('<canvas id="video" width="400" height="300" />');
+                 //var photo = document.createElement('canvas');
+                 //video.insertBefore(photo);
+                 var photo = document.getElementById('video');
+                 var canvas = photo.getContext('2d');
+                 var img = canvas.createImageData(400, 300);
+                 img.data.set(data);
+                 canvas.putImageData(img, 0, 0);
+            }
 
             var config = {"iceServers": []};
             peerConnection = new webkitRTCPeerConnection(config);
@@ -204,8 +216,25 @@
             }
 
             dataChannel = peerConnection.createDataChannel('camera', {});
-            dataChannel.onmessage = function(e){console.log("DC message:" +e.data);};
-            dataChannel.onopen = function(){console.log("------ DATACHANNEL OPENED ------"); dataChannel.send('hello!');}
+            dataChannel.onmessage = function(e) {
+               if (typeof event.data === 'string') {
+                   buf = new Uint8ClampedArray(parseInt(event.data));
+                   count = 0;
+                   console.log('Expecting a total of ' + buf.byteLength + ' bytes');
+                   return;
+               }
+               var data = new Uint8ClampedArray(event.data);
+               buf.set(data, count);
+               count += data.byteLength;
+               if (count === buf.byteLength) {
+                   // we're done: all data chunks have been received
+                   renderPhoto(buf);
+               }
+            };
+            dataChannel.onopen = function(){
+                console.log("------ DATACHANNEL OPENED ------");
+                dataChannel.send('hello!');
+            }
             dataChannel.onclose = function(){
               console.log("------- DC closed! -------");
             };

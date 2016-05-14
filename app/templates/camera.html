@@ -103,8 +103,39 @@
         peerConnection.ondatachannel = function (e) {
             console.log('peerConnection.ondatachannel event fired.');
             dataChannel = e.channel;
-            dataChannel.onmessage = function(e){console.log("DC message:" +e.data);}
-            dataChannel.onopen = function(){console.log("------ DATACHANNEL OPENED ------")};
+            dataChannel.onmessage = function(e){
+              console.log("DC message:" +e.data);
+            }
+            dataChannel.onopen = function(){
+              console.log("------ DATACHANNEL OPENED ------")
+
+              context.drawImage(video, 0, 0, 400, 300);
+
+
+              // Split data channel message in chunks
+              var CHUNK_LEN = 64000;
+              // Get the image bytes and calculate the number of chunks
+              var img = context.getImageData(0, 0, 400, 300);
+              var len = img.data.byteLength;
+              var n = len / CHUNK_LEN | 0;
+              // Let the other peer know in advance how many bytes to expect in total
+              dataChannel.send(len);
+              // Split the photo in chunks and send it over the data channel
+              for (var i = 0; i < n; i++) {
+                 var start = i * CHUNK_LEN;
+                 var end = (i+1) * CHUNK_LEN;
+                 dataChannel.send(img.data.subarray(start, end));
+              }
+              // Send the reminder, if any
+              if (len % CHUNK_LEN) {
+                 dataChannel.send(img.data.subarray(n * CHUNK_LEN));
+              }
+
+
+
+
+
+            };
             dataChannel.onclose = function(){console.log("------ DC closed! ------")};
             dataChannel.onerror = function(){console.log("DC ERROR!!!")};
         };
