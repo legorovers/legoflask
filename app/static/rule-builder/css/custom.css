@@ -22,7 +22,16 @@
 #actions .btn {
     margin: 6px;
 }
-.action-placeholder {
+ul.actions, li.action , li.dndPlaceholder {
+    position: relative;
+}
+ul.actions {
+    list-style: none;
+}
+li.action, li.dndPlaceholder {
+  display: inline-block;
+}
+.action-placeholder, .dndPlaceholder {
     border: 2px dotted #666;
 }
 .dropdown-menu .btn {

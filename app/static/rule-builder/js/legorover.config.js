@@ -1,1 +1,1 @@
-angular.module('legorover', ['ui.bootstrap', 'legorover.routes', 'legorover.main.controller', 'legorover.plan.controller', 'legorover.plan.service', 'legorover.trigger.service', 'legorover.action.service', 'ngDragDrop']);
+angular.module('legorover', ['ui.bootstrap', 'legorover.routes', 'legorover.main.controller', 'legorover.plan.controller', 'legorover.plan.service', 'legorover.trigger.service', 'legorover.action.service', 'dndLists']);

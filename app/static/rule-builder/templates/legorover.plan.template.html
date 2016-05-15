@@ -18,21 +18,35 @@
         <p><b>Then...</b> add one or more actions</p>
         <div id="actions" >
             <div>
-                <div>
-                    <div class="btn btn-info btn-draggable" ng-repeat="item in options.actions" ng-model="options.actions" ng-show="item.title" data-drag="true" data-jqyoui-options="{helper: 'clone'}" jqyoui-draggable="{index: {{$index}}, placeholder: 'keep'}"><span class="glyphicon icon-{{ className(item.title) }}"></span><span class="sr-only">{{item.title}}</span></div>
-                </div>
-                <div id="actions-selected" class="well" data-drop="true" ng-model="plan.actions" jqyoui-droppable="{multiple:true}">
-            <span ng-repeat="item in plan.actions track by $index">
-                <span class="btn btn-info action-selected" ng-show="item.title" ng-model="plan.actions"><span class="glyphicon icon-{{ className(item.title) }}"></span><span class="sr-only">{{item.title}}</span></span> then
-            </span>
+                <ul class="actions">
+                    <li class="action btn btn-info"
+                        ng-repeat="item in options.actions"
+                        dnd-draggable="item"
+                        dnd-effect-allowed="copy"
+                        dnd-copied="console.log('Item copied', event)"
+                ><span class="glyphicon icon-{{ className(item.title) }}"></span><span class="sr-only">{{item.title}}</span></li>
+                </ul>
+                <ul class="actions well" dnd-list="plan.actions" dnd-horizontal-list="true">
+                    <li class="action"
+                        ng-repeat="item in plan.actions"
+                        dnd-draggable="item"
+                        dnd-effect-allowed="move"
+                        dnd-moved="plan.actions.splice($index, 1); console.log('Item moved', event)"
+                        dnd-copied="console.log('Item copied', event)"
+                        >
+                        <span class="btn btn-info action-selected"><span class="glyphicon icon-{{ className(item.title) }}"></span><span class="sr-only">{{item.title}}</span></span> then
+                    </li>
 
-            <span ng-show="!plan.actions.length">
-                <span class="btn action-placeholder"><span class="glyphicon glyphicon-plus"></span><span class="sr-only">ACTION</span></span> then
-            </span>
-            <span>
-                <span class="btn action-placeholder"><span class="glyphicon glyphicon-plus"></span><span class="sr-only">ACTION</span></span> then
-            </span>
-                </div>
+                    <!--li class="actions" ng-show="!plan.actions.length">
+                        <span class="btn action-placeholder"><span class="glyphicon glyphicon-plus"></span><span class="sr-only">ACTION</span></span> then
+                    </li>
+                    <li class="actions">
+                        <span class="btn action-placeholder"><span class="glyphicon glyphicon-plus"></span><span class="sr-only">ACTION</span></span> then
+                    </li -->
+                </ul>
+                <ul dnd-list="[]">
+                drag here to delete
+                </ul>
             </div>
         </div>
     </div>
