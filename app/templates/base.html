@@ -193,10 +193,10 @@
                 socket.emit('rule', $('#rule').val());
             });
 
-            var buf, count, canvas;
+            var buf, byteLength, count, canvas;
 
-            function renderPhoto(data) {
-                var blob = new Blob([data], {type: 'image/jpeg'});
+            function renderPhoto(buffers) {
+                var blob = new Blob(buffers, {type: 'image/jpeg'});
                 var url = URL.createObjectURL(blob);
                 video.src = url;
             }
@@ -213,15 +213,16 @@
             dataChannel = peerConnection.createDataChannel('camera', {});
             dataChannel.onmessage = function(e) {
                if (typeof event.data === 'string') {
-                   buf = new Uint8ClampedArray(parseInt(event.data));
+                   byteLength = parseInt(event.data);
+                   buf = [];
                    count = 0;
-                   console.log('Expecting a total of ' + buf.byteLength + ' bytes');
+                   console.log('Expecting a total of ' + byteLength + ' bytes');
                    return;
                }
                var data = new Uint8ClampedArray(event.data);
-               buf.set(data, count);
+               buf.push(data);
                count += data.byteLength;
-               if (count === buf.byteLength) {
+               if (count === byteLength) {
                    // we're done: all data chunks have been received
                    renderPhoto(buf);
                }

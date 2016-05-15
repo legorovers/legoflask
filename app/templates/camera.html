@@ -92,57 +92,66 @@
 
         socket = io.connect('wss://legorover.space', {transports: ['websocket']});
 
-        var config = {"iceServers": []};
-        peerConnection = new webkitRTCPeerConnection(config);
-        peerConnection.onicecandidate = function(e) {
-            if (!peerConnection || !e || !e.candidate) return;
-            socket.emit('answer ice', e.candidate);
-            console.log('answer ice');
-        }
+        function newRTCPeerConnection() {
+          var config = {"iceServers": []};
+          peerConnection = new webkitRTCPeerConnection(config);
+          peerConnection.onicecandidate = function(e) {
+              if (!peerConnection || !e || !e.candidate) return;
+              socket.emit('answer ice', e.candidate);
+              console.log('answer ice');
+          }
 
-        peerConnection.ondatachannel = function (e) {
-            console.log('peerConnection.ondatachannel event fired.');
-            dataChannel = e.channel;
-            dataChannel.onmessage = function(e){
-              console.log("DC message:" +e.data);
-            }
-            dataChannel.onopen = function(){
-              console.log("------ DATACHANNEL OPENED ------")
+          peerConnection.ondatachannel = function (e) {
+              var sendImageId;
+              console.log('peerConnection.ondatachannel event fired.');
+              dataChannel = e.channel;
+              dataChannel.onmessage = function(e){
+                console.log("DC message:" +e.data);
+              }
+              dataChannel.onopen = function(){
+                console.log("------ DATACHANNEL OPENED ------")
 
-              setInterval(function() {
+                sendImageId = setInterval(function() {
 
-                context.drawImage(video, 0, 0, 400, 300);
+                  context.drawImage(video, 0, 0, 400, 300);
 
-                // Split data channel message in chunks
-                var CHUNK_LEN = 64000;
-                // Get the image bytes and calculate the number of chunks
-                canvas.toBlob(function(blob) {
-                  var reader = new FileReader();
-                  reader.addEventListener("loadend", function() {
-                    var data = new Uint8ClampedArray(reader.result);
-                    var len = data.length;
-                    var n = len / CHUNK_LEN | 0;
-                    // Let the other peer know in advance how many bytes to expect in total
-                    dataChannel.send(len);
-                    // Split the photo in chunks and send it over the data channel
-                    for (var i = 0; i < n; i++) {
-                       var start = i * CHUNK_LEN;
-                       var end = (i+1) * CHUNK_LEN;
-                       dataChannel.send(data.subarray(start, end));
-                    }
-                    // Send the reminder, if any
-                    if (len % CHUNK_LEN) {
-                       dataChannel.send(data.subarray(n * CHUNK_LEN));
-                    }
-                  });
-                  reader.readAsArrayBuffer(blob);
-                }, "image/jpeg", 0.85);
+                  // Split data channel message in chunks
+                  var CHUNK_LEN = 64000;
+                  // Get the image bytes and calculate the number of chunks
+                  canvas.toBlob(function(blob) {
+                    var reader = new FileReader();
+                    reader.addEventListener("loadend", function() {
+                      var data = new Uint8ClampedArray(reader.result);
+                      var len = data.length;
+                      var n = len / CHUNK_LEN | 0;
+                      // Let the other peer know in advance how many bytes to expect in total
+                      dataChannel.send(len);
+                      // Split the photo in chunks and send it over the data channel
+                      for (var i = 0; i < n; i++) {
+                         var start = i * CHUNK_LEN;
+                         var end = (i+1) * CHUNK_LEN;
+                         dataChannel.send(data.subarray(start, end));
+                      }
+                      // Send the reminder, if any
+                      if (len % CHUNK_LEN) {
+                         dataChannel.send(data.subarray(n * CHUNK_LEN));
+                      }
+                    });
+                    reader.readAsArrayBuffer(blob);
+                  }, "image/jpeg", 0.85);
 
-              }, 1000);
-            };
-            dataChannel.onclose = function(){console.log("------ DC closed! ------")};
-            dataChannel.onerror = function(){console.log("DC ERROR!!!")};
+                }, 500);
+              };
+              dataChannel.onclose = function() {
+                console.log("------ DC closed! ------")
+                clearInterval(sendImageId);
+                dataChannel = null;
+                newRTCPeerConnection();
+              };
+              dataChannel.onerror = function(){console.log("DC ERROR!!!")};
+          };
         };
+        newRTCPeerConnection();
 
         socket.on('offer', function(offer) {
             console.log('received offer');
