@@ -3,7 +3,8 @@ import sys
 import time
 import gevent
 from shutil import copyfile, move
-from flask import Flask, abort, render_template, jsonify, request
+from json import dumps
+from flask import Flask, abort, render_template, jsonify, request, make_response
 from flask_socketio import SocketIO, emit
 
 from sense import SensorThread
@@ -42,10 +43,13 @@ def handle_delay(delay):
 def handle_rule(rule):
     print('new rule: ' + rule)
 
+current_rules = []
 @app.route('/api/rules/', methods=['GET', 'POST'])
 def rules():
+    global current_rules
     if request.method == 'POST':
         print request.json
+        current_rules = request.json
         compiled_rules = []
         for rule in request.json:
             title = rule['title']
@@ -54,7 +58,10 @@ def rules():
             print "rule: %s" % title
             compiled_rules.append(Rule(trigger['title'], (a['title'] for a in actions)))
         rule_engine.activate(compiled_rules)
-    return jsonify(result='ok')
+        return jsonify(result='ok')
+
+    # else
+    return make_response(dumps(current_rules))
 
 
 @app.route('/camera/')
