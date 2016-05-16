@@ -7,7 +7,7 @@ class SensorThread(object):
         self.notify = notify
         self.delay = delay
         self.interval = 0.2
-        self.distance = -1
+        self.color = -1
 
     def start(self, control, robot):
         self.control = control
@@ -18,16 +18,15 @@ class SensorThread(object):
 
     def run(self):
         while True:
-            distance = int(self.robot.distance())
-            touch_left = self.robot.touch_left()
-            touch_right = self.robot.touch_right()
+            color = int(self.robot.color())
+            touch = self.robot.touch()
             direction = self.robot.direction()
-            self.control.readings(distance, touch_left, touch_right, direction)
+            self.control.readings(color, touch, direction)
             time.sleep(self.interval)
 
-    def sensors(self, distance, touch_left, touch_right, direction):
-        print "sense: %s %s %s" % (touch_left, touch_right, direction)
-        if not self.distance == distance:
-            self.notify.emit('sense', distance)
-            self.distance = distance
-            print "distance %scm" % distance
+    def sensors(self, color, touch, direction):
+        #print "sense: %s %s" % (touch, direction)
+        if not self.color == color:
+            self.notify.emit('sense', color)
+            self.color = color
+            print "color %s%%" % color

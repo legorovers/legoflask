@@ -155,7 +155,7 @@
             });
 
             socket.on('sense', function(data) {
-                var height = data/255*300;
+                var height = data/100*300;
                 console.log(height);
                 $('#sensor div').height(height);
             });

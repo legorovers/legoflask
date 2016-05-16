@@ -3,13 +3,13 @@ angular.module('legorover.trigger.service', []).factory('triggerService', functi
     function get() {
         return [
             {
-                title: 'left obstacle'
+                title: 'collision'
             },
             {
-                title: 'right obstacle'
+                title: 'dark ground'
             },
             {
-                title: 'proximity'
+                title: 'noise'
             }
         ];
     }

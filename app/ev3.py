@@ -16,10 +16,9 @@ cmotor.reset()
 assert lmotor.connected
 assert rmotor.connected
 
-ussensor = UltrasonicSensor()
+color_sensor = ColorSensor()
+touch_sensor = TouchSensor()
 gyro = GyroSensor()
-left = TouchSensor(INPUT_1)
-right = TouchSensor(INPUT_4)
 
 def _start():
     '''
@@ -67,14 +66,11 @@ def spin_left(speed=50):
     lmotor.duty_cycle_sp=-speed
     rmotor.duty_cycle_sp=speed
 
-def distance():
-    return ussensor.value() / 10.0
+def color():
+    return color_sensor.value()
 
-def touch_left():
-    return left.value() == 1
-
-def touch_right():
-    return right.value() == 1
+def touch():
+    return touch_sensor.value() == 1
 
 def direction():
     return gyro.value() % 360  # degrees, but needs a 0 value

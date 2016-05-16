@@ -64,7 +64,7 @@ class ControlThread(object):
             task = self.queue.get()
             self.queue.task_done()
             delay_for = task['timestamp'] - time.time()
-            print "delay %s" % delay_for
+            #print "delay %s" % delay_for
             if delay_for > 0:
                 self.sleep.acquire()
                 self.sleep.wait(delay_for)

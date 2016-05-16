@@ -26,11 +26,10 @@ class RuleEngine(object):
         self.control = control
         self.rules = []
 
-    def check(self, distance, touch_left, touch_right, direction):
+    def check(self, color, touch, direction):
         for rule in self.rules:
-            if (rule.trigger == 'left obstacle' and touch_left) \
-                   or (rule.trigger == 'right obstacle' and touch_right) \
-                   or (rule.trigger == 'proximity' and distance < 8):
+            if (rule.trigger == 'collision' and touch) \
+                   or (rule.trigger == 'dark ground' and color < 10):
                 self.control.program(*rule.code)
 
     def activate(self, rules):
