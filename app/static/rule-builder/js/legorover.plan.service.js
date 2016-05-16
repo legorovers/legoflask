@@ -1,6 +1,10 @@
 angular.module('legorover.plan.service', []).factory('planService', function ($http) {
     'use strict';
-    var plans = [];
+    var plans = null;
+    var promise = $http.get('/api/rules/').success(function(result) {
+        //resolve the promise as the data
+        plans = result;
+    });
     function send() {
         return $http.post('/api/rules/', plans);
     }
@@ -44,6 +48,7 @@ angular.module('legorover.plan.service', []).factory('planService', function ($h
         return;
     }
     return {
+        promise: promise,
         get: get,
         create: create,
         remove: remove,

@@ -4,7 +4,12 @@ angular.module('legorover.routes', ['ngRoute']).config(['$routeProvider',
         $routeProvider.
             when('/', {
                 templateUrl: 'templates/legorover.main.template.html',
-                controller: 'mainController'
+                controller: 'mainController',
+                resolve: {
+                    'planServiceData': function(planService) {
+                        return planService.promise;
+                    }
+                }
             }).
             when('/plans/new', {
                 templateUrl: 'templates/legorover.plan.template.html',
