@@ -20,7 +20,10 @@ class SensorThread(object):
         while True:
             color = int(self.robot.color())
             touch = self.robot.touch()
-            direction = self.robot.direction()
+            try:
+                direction = self.robot.direction()
+            except:
+                direction = 0
             self.control.readings(color, touch, direction)
             time.sleep(self.interval)
 
