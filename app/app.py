@@ -24,7 +24,7 @@ def page_not_found(error):
 
 @app.route('/')
 def index():
-    control.camera_forward()
+    control.camera('forward')
     return render_template('index.html', title='WebRover1')
 
 @socketio.on('action')
