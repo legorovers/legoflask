@@ -150,6 +150,9 @@
             $('#look-left').click(function() {
                 socket.emit('camera', 'left');
             });
+            $('#video').click(function() {
+                socket.emit('camera', 'centre');
+            });
             $('#look-right').click(function() {
                 socket.emit('camera', 'right');
             });

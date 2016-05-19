@@ -24,6 +24,7 @@ def page_not_found(error):
 
 @app.route('/')
 def index():
+    control.camera_forward()
     return render_template('index.html', title='WebRover1')
 
 @socketio.on('action')
@@ -82,12 +83,6 @@ def upload():
     #gevent.sleep(0)           # flush emit messages
     return str(control.delay)
 
-def camera_offline():
-    try:
-        os.remove(IMG_DIR + 'camera.data')
-    except OSError:
-        pass
-
 # just pass these on for rtc
 @socketio.on('offer')
 def offer(data):
@@ -114,7 +109,6 @@ if __name__ == '__main__':
     else:
         import ev3
         robot = ev3
-    camera_offline()
     control.start(sense, rule_engine, robot)
     print 'running socketio'
     socketio.run(app, host='0.0.0.0', port=5000) #, debug=True)
