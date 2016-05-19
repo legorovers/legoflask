@@ -3,13 +3,13 @@ angular.module('legorover.action.service', []).factory('actionService', function
     function get() {
         return [
             {
+                title: 'forward'
+            },
+            {
                 title: 'left'
             },
             {
                 title: 'right'
-            },
-            {
-                title: 'forward'
             },
             {
                 title: 'back'
@@ -18,13 +18,13 @@ angular.module('legorover.action.service', []).factory('actionService', function
                 title: "stop"
             },
             {
-                title: "speak"
-            },
-            {
                 title: "turn-left"
             },
             {
                 title: "turn-right"
+            },
+            {
+                title: "speak"
             }
         ];
     }

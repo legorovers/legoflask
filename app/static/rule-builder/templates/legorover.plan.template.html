@@ -36,16 +36,17 @@
                         >
                         <span class="btn btn-info action-selected"><span class="glyphicon icon-{{ className(item.title) }}"></span><span class="sr-only">{{item.title}}</span></span> then
                     </li>
-
-                    <!--li class="actions" ng-show="!plan.actions.length">
-                        <span class="btn action-placeholder"><span class="glyphicon glyphicon-plus"></span><span class="sr-only">ACTION</span></span> then
-                    </li>
-                    <li class="actions">
+                    <span ng-show="!plan.actions.length" class="glyphicon glyphicon-plus"></span>
+                </ul>
+                <!--li class="action" ng-show="!plan.actions.length">
+                    <span class="btn action-placeholder"><span class="glyphicon glyphicon-plus"></span><span class="sr-only">ACTION</span></span> then
+                </li-->
+                    <!--li class="actions">
                         <span class="btn action-placeholder"><span class="glyphicon glyphicon-plus"></span><span class="sr-only">ACTION</span></span> then
                     </li -->
-                </ul>
                 <ul dnd-list="[]">
-                drag here to delete
+                    <span class="glyphicon glyphicon-trash"></span>
+                    drag here to delete
                 </ul>
             </div>
         </div>

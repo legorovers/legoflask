@@ -44,6 +44,10 @@ ul.actions {
 li.action, li.dndPlaceholder {
   display: inline-block;
 }
+li.dndPlaceholder {
+  min-height: 32px;
+  min-width: 32px;
+}
 .action-placeholder, .dndPlaceholder {
     border: 2px dotted #666;
 }
