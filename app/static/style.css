@@ -12,6 +12,9 @@ body {
     background-color: #262626;
     margin: 0;
 }
+a {
+    color: #17fdfb;
+}
 #heading {
     position: absolute;
     left: 0;
