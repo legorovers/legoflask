@@ -45,12 +45,31 @@ cat GandiStandardSSLCA2.pem >> legorover.crt
 
 # TODO
 
-Remove the small delay on long press touchstart events ?
+Add delay back to camera images
+Add different CSS wash depending on Mars/Moon/Aus/etc.
+Audio sensing via phone
+CSS Styling of rule builder!
+Action feedback on display
 
-WebRTC
-https://io2014codelabs.appspot.com/static/codelabs/webrtc-file-sharing/#7
-http://www.justgoscha.com/programming/2014/03/07/simple-webrtc-datachannel-establishment-for-dummies.html
-https://www.webrtc-experiment.com/docs/how-to-use-rtcdatachannel.html#rtp-chrome
-sudo apt-get install rfc5766-turn-server
-less /etc/turnserver.conf
-sudo service rfc5766-turn-server start
+
+# The Lego Model
+
+Educator Vehicle
+http://robotsquare.com/wp-content/uploads/2013/10/45544_educator.pdf
+
+Riley Rover
+http://www.damienkee.com/storage/rileyrover/RileyRover_BI.pdf
+
+The ‘RetailRover’…
+http://www.damienkee.com/storage/rileyrover/RetailRover.pdf
+
+## Connections
+
+B - Large Motor (Left)
+C - Medium Motor (Camera)
+D - Large Motor (Right)
+
+n - Touch Sensor (Collision)
+n - Colour Sensor (Reflected Light)
+n - Gyro Sensor (optional)
+
