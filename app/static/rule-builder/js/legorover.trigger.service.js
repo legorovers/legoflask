@@ -9,8 +9,11 @@ angular.module('legorover.trigger.service', []).factory('triggerService', functi
                 title: 'dark ground'
             },
             {
+                title: 'light ground'
+            }/*,
+            {
                 title: 'noise'
-            }
+            }*/
         ];
     }
     return {

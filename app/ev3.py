@@ -56,15 +56,40 @@ def stop():
         motor.stop()
     moving = False
 
+def turn_right(speed=40):
+    '''
+    Turn while moving forward
+    '''
+    _start()
+    lmotor.duty_cycle_sp=speed
+    rmotor.duty_cycle_sp=0
+
+def turn_left(speed=40):
+    '''
+    Turn while moving forward
+    '''
+    _start()
+    lmotor.duty_cycle_sp=0
+    rmotor.duty_cycle_sp=speed
+
 def spin_right(speed=50):
+    '''
+    Turn on the spot
+    '''
     _start()
     lmotor.duty_cycle_sp=speed
     rmotor.duty_cycle_sp=-speed
 
 def spin_left(speed=50):
+    '''
+    Turn on the spot
+    '''
     _start()
     lmotor.duty_cycle_sp=-speed
     rmotor.duty_cycle_sp=speed
+
+def speak():
+    Sound.speak('Excuse me!')
 
 def color():
     return color_sensor.value()

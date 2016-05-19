@@ -13,7 +13,7 @@ class Rule(object):
                 action = ('reverse', 40)
             elif a == 'stop':
                 action = (None, 0)
-            else:   # forward, left, right
+            else:   # forward, left, right, speak
                 action = (a, 40)
             self.code.append(time)
             self.code.append(action)
@@ -29,7 +29,8 @@ class RuleEngine(object):
     def check(self, color, touch, direction):
         for rule in self.rules:
             if (rule.trigger == 'collision' and touch) \
-                   or (rule.trigger == 'dark ground' and color < 10):
+                   or (rule.trigger == 'dark ground' and color < 10)  \
+                   or (rule.trigger == 'light ground' and color > 10):
                 self.control.program(*rule.code)
 
     def activate(self, rules):

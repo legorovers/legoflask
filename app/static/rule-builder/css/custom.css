@@ -19,6 +19,19 @@
 .icon-stop:before {
     content: "\e074";
 }
+.icon-speak:before {
+    content: "\e111";
+}
+.icon-turn-left:before {
+    content: "\e095";
+}
+.icon-turn-left {
+    transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+}
+.icon-turn-right:before {
+    content: "\e095";
+}
 #actions .btn {
     margin: 6px;
 }

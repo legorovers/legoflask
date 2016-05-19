@@ -16,6 +16,15 @@ angular.module('legorover.action.service', []).factory('actionService', function
             },
             {
                 title: "stop"
+            },
+            {
+                title: "speak"
+            },
+            {
+                title: "turn-left"
+            },
+            {
+                title: "turn-right"
             }
         ];
     }

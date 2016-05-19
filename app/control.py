@@ -91,6 +91,12 @@ class ControlThread(object):
             self.robot.spin_right(speed)
         elif direction == 'reverse':
             self.robot.backward(speed)
+        elif direction == 'turn-left':
+            self.robot.turn_left(speed)
+        elif direction == 'turn-right':
+            self.robot.turn_right(speed)
+        elif direction == 'speak':
+            self.robot.speak()
         else:
             self.robot.stop()
 
