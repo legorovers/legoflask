@@ -4,11 +4,11 @@ from time import sleep
 from ev3dev.auto import *
 
 # Connect two large motors on output ports A and C
-lmotor, rmotor = [LargeMotor(address) for address in (OUTPUT_A, OUTPUT_C)]
+lmotor, rmotor = [LargeMotor(address) for address in (OUTPUT_B, OUTPUT_D)]
 moving = False
 
 # Connect medium motors on output port B for the camera
-cmotor = MediumMotor(OUTPUT_B)
+cmotor = MediumMotor(OUTPUT_C)
 camera_pos = 0
 cmotor.reset()
 
