@@ -93,7 +93,7 @@ def spin_left(speed=50):
 def speak():
     global speaking
     print "%s" % speaking
-    if speaking is None or time() - speaking > 1.5:
+    if speaking is None or time() - speaking > 1.6:
         speaking = time()
         print 'Excuse me!'
         Sound.speak('Excuse me!')
