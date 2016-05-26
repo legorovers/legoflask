@@ -49,7 +49,9 @@ Add delay back to camera images
 Add different CSS wash depending on Mars/Moon/Aus/etc.
 Audio sensing via phone
 CSS Styling of rule builder!
-Action feedback on display
+Action feedback on nav panel
+Allow rules to act on lights on panel
+Allow rules to play tones (close encounters?)
 
 
 # The Lego Model
