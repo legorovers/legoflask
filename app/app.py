@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import gevent
+
 from shutil import copyfile, move
 from json import dumps
 from flask import Flask, abort, render_template, jsonify, request, make_response
@@ -68,20 +69,6 @@ def rules():
 @app.route('/camera/')
 def camera():
     return render_template('camera.html')
-
-IMG_DIR = '/home/robot/webrover1/app/static/images/'
-@app.route('/upload/', methods=['POST'])
-def upload():
-    ts = time.time()
-    file = open(IMG_DIR + 'camera-upload.data', 'wb')
-    file.write(request.get_data())
-    file.close()
-    move(IMG_DIR + 'camera-upload.data', IMG_DIR + 'camera.data')
-    print "upload (took %sms)" % ((time.time() - ts) * 1000)
-    # delay is handled in the camera browser
-    #socketio.emit('refresh')
-    #gevent.sleep(0)           # flush emit messages
-    return str(control.delay)
 
 # just pass these on for rtc
 @socketio.on('offer')
