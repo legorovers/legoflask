@@ -29,8 +29,8 @@ class RuleEngine(object):
     def check(self, color, touch, direction):
         for rule in self.rules:
             if (rule.trigger == 'collision' and touch) \
-                   or (rule.trigger == 'dark ground' and color < 10)  \
-                   or (rule.trigger == 'light ground' and color > 10):
+                   or (rule.trigger == 'dark ground' and color < 40)  \
+                   or (rule.trigger == 'light ground' and color >= 40):
                 self.control.program(*rule.code)
 
     def activate(self, rules):
