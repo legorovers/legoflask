@@ -1,7 +1,7 @@
 import threading
 import time
 import math
-from Queue import Queue
+from Queue import Queue, Empty
 
 class ControlThread(object):
 
