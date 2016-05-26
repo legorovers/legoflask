@@ -1,6 +1,6 @@
 # See http://ev3dev-lang.readthedocs.org/projects/python-ev3dev/en/stable/index.html
 # for API details -- specific Sensor/Motor docs http://www.ev3dev.org/docs/
-from time import sleep
+from time import sleep, time
 from ev3dev.auto import *
 
 # Connect two large motors on output ports A and C
@@ -19,6 +19,8 @@ assert rmotor.connected
 color_sensor = ColorSensor()
 touch_sensor = TouchSensor()
 gyro = GyroSensor()
+
+speaking = None
 
 def _start():
     '''
@@ -89,7 +91,13 @@ def spin_left(speed=50):
     rmotor.duty_cycle_sp=speed
 
 def speak():
-    Sound.speak('Excuse me!')
+    global speaking
+    print "%s" % speaking
+    if speaking is None or time() - speaking > 1.5:
+        speaking = time()
+        print 'Excuse me!'
+        Sound.speak('Excuse me!')
+
 def light_green():
     Leds.set_color(Leds.LEFT+Leds.RIGHT, Leds.GREEN+Leds.GREEN)
 
