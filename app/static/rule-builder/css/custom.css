@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Exo';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Exo Light'), local('Exo-Light'), url(/static/exo-light.woff) format('woff');
+}
+
 #main {
     padding: 24px 0;
 }
