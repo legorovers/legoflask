@@ -6,7 +6,7 @@ class SensorThread(object):
     def __init__(self, notify, delay=0):
         self.notify = notify
         self.delay = delay
-        self.interval = 0.2
+        self.interval = 0.1
         self.color = -1
 
     def start(self, control, robot):
