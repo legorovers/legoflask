@@ -25,6 +25,12 @@ angular.module('legorover.action.service', []).factory('actionService', function
             },
             {
                 title: "speak"
+            },
+            {
+                title: "light-green"
+            },
+            {
+                title: "light-red"
             }
         ];
     }

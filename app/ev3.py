@@ -90,6 +90,11 @@ def spin_left(speed=50):
 
 def speak():
     Sound.speak('Excuse me!')
+def light_green():
+    Leds.set_color(Leds.LEFT+Leds.RIGHT, Leds.GREEN+Leds.GREEN)
+
+def light_red():
+    Leds.set_color(Leds.LEFT+Leds.RIGHT, Leds.RED+Leds.RED)
 
 def color():
     return color_sensor.value()

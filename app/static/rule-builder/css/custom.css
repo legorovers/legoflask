@@ -32,6 +32,14 @@
 .icon-turn-right:before {
     content: "\e095";
 }
+.icon-light-red:before {
+    content: "\e124";
+    color: darksalmon;
+}
+.icon-light-green:before {
+    content: "\e124";
+    color: palegreen;
+}
 #actions .btn {
     margin: 6px;
 }

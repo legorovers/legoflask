@@ -97,6 +97,10 @@ class ControlThread(object):
             self.robot.turn_right(speed)
         elif direction == 'speak':
             self.robot.speak()
+        elif direction == 'light-red':
+            self.robot.light_red()
+        elif direction == 'light-green':
+            self.robot.light_green()
         else:
             self.robot.stop()
 
@@ -107,4 +111,8 @@ class ControlThread(object):
             self.robot.camera_right()
         else:
             self.robot.camera_forward()
+
+    def reset(self):
+        self.robot.light_green()
+        self.robot.camera_forward()
 
